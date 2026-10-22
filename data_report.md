@@ -6,6 +6,10 @@ request is logged with status, final URL, content type and size in
 `data/raw/` and are never overwritten (re-downloads get a timestamp suffix).
 To rebuild the clean files from raw: `python -P scripts/clean.py`.
 
+> **Public repository note:** the Equinor and BP assay files (and the GAMS `pool` files added later for
+> validation) are not redistributed. Re-download them with `scripts/get_equinor.py`, `scripts/get_bp.py` and
+> `scripts/get_gamslib.py`; paths below refer to where those scripts put them.
+
 ## Summary
 
 | Source | Reachable | What was obtained | Date range | Issues |
