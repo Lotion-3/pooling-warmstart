@@ -118,3 +118,25 @@ Every assumption, deviation and adjustment made during the unattended run. Times
   (both samples, every date), far inside the 06:45 limit.
 - Trap is defined as: IPOPT ends at a feasible point (max violation ≤ 1e-5) whose objective is > 1e-4 (relative)
   worse than SCIP's.
+
+## Phase 4 — overnight solve (02:32–03:04)
+
+- **All 9,898 instances** solved in 31.5 min on 19 worker processes (≈314/min).
+- **SCIP status:** 8,219 optimal; 1,647 stopped at the 1e-6 gap limit (certified); **32 proven infeasible**.
+  Infeasible means the CDU minimum throughputs can't be met within the specs and availabilities. Those 32 are
+  kept in `data/solved/` but have no labels and are excluded from Phase 5.
+- **Time limit:** no instance hit 60 s (max 11.6 s), so none needed the "uncertified" exclusion.
+- **IPOPT** (20 random starts × 9,866 certified instances): hit 0.878, **trap 0.122**, 3,110 instances with
+  ≥ 1 trapped start, 0 points better than SCIP. Summary: `results/phase4_summary.txt`.
+- **Fixed-network dataset added** (an interpretation decision):
+  - Plot 3 asks whether failures cluster "at dates where the optimal structure changed from the previous day".
+    That needs the same network on consecutive days, but the main set draws a new crude set and network for
+    every (date, sample).
+  - So a second set, `instances_fixed.parquet`, reuses **2 fixed networks** (sampled once, seed 20261022+1;
+    see `fixed_networks.json`) on all 4,949 dates. Only prices vary.
+  - Same solver settings. It is used for plot 3 and as a second learning setting.
+  - The main benchmark (`varied`) remains the primary result.
+- **Results storage:** batched part files in `data/solved/parts*/`, consolidated into
+  `data/solved/solved.parquet` / `solved_fixed.parquet` by `scripts/consolidate.py`.
+- **Timing caveat:** all timings were measured with 19 concurrent processes on 14 physical cores, so absolute
+  times are inflated relative to a single idle core. That applies equally to SCIP and IPOPT.

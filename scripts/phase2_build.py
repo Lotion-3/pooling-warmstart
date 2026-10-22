@@ -26,6 +26,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--design", default=None)
 ap.add_argument("--samples", type=int, default=2)
 ap.add_argument("--seed", type=int, default=20261022)
+ap.add_argument("--fixed-networks", action="store_true",
+                help="sample each network (crudes, topology, specs) ONCE per sample index and reuse it on every date")
 args = ap.parse_args()
 
 design = R.DEFAULT_DESIGN if args.design is None else json.loads(Path(args.design).read_text())
@@ -56,12 +58,20 @@ rows = []
 master = np.random.SeedSequence(args.seed)
 dates = prices.index
 children = master.spawn(len(dates) * args.samples)
+fixed_nets = None
+if args.fixed_networks:
+    fixed_rngs = [np.random.default_rng(c) for c in np.random.SeedSequence(args.seed + 1).spawn(args.samples)]
+    fixed_nets = [R.sample_instance(crudes, r, design) for r in fixed_rngs]
+prefix = "F" if args.fixed_networks else ""
 for di, (date, prow) in enumerate(prices.iterrows()):
     for s in range(args.samples):
-        rng = np.random.default_rng(children[di * args.samples + s])
-        net = R.sample_instance(crudes, rng, design)
-        inst = R.build_instance(crudes, net, prow, date, model, name=f"{date.date()}_s{s}")
-        row = {"inst_id": f"{date.date()}_s{s}", "date": date, "sample": s,
+        if fixed_nets is None:
+            net = R.sample_instance(crudes, np.random.default_rng(children[di * args.samples + s]), design)
+        else:
+            net = fixed_nets[s]
+        iid = f"{prefix}{date.date()}_s{s}"
+        inst = R.build_instance(crudes, net, prow, date, model, name=iid)
+        row = {"inst_id": iid, "date": date, "sample": s,
                "crudes": inst.meta["crudes"], "crude_cost": inst.meta["cost"].tolist(),
                "crude_worth": inst.meta["worth"].tolist(),
                "crude_api": crudes.api[net["crude_idx"]].tolist(), "crude_s": crudes.sulfur_pct[net["crude_idx"]].tolist(),
@@ -74,7 +84,11 @@ for di, (date, prow) in enumerate(prices.iterrows()):
 df = pd.DataFrame(rows)
 out = ROOT / "data" / "instances"
 out.mkdir(parents=True, exist_ok=True)
-write_parquet(df, out / "instances.parquet")
+write_parquet(df, out / ("instances_fixed.parquet" if args.fixed_networks else "instances.parquet"))
 (out / "design.json").write_text(json.dumps(design, indent=1))
+if fixed_nets is not None:
+    (out / "fixed_networks.json").write_text(json.dumps(
+        [{"crudes": crudes.crude_id[n["crude_idx"]].tolist(), **{k: (v.tolist() if hasattr(v, "tolist") else v)
+          for k, v in n.items() if k != "crude_idx"}} for n in fixed_nets], indent=1))
 print(f"{len(df)} instances from {len(dates)} dates x {args.samples} samples in {time.time()-t0:.0f}s; "
       f"price model fallback={model['fallback']} yearly={model['use_yearly']}")

@@ -1,0 +1,8 @@
+n 9898 | SCIP status Counter({'optimal': 8219, 'gaplimit': 1647, 'infeasible': 32}) | certified 9866
+SCIP time s: mean 0.87  p95 2.95  max 11.62
+IPOPT time/start s: mean 0.134  p95 0.262
+over certified: hit 0.878 | TRAP 0.122 | infeasible-end 0.000 | beats-global 0
+instances with trap>0: 3110 / 9866
+IPOPT terms [('optimal', 197250), ('infeasible', 67), ('internalSolverError', 3)]
+binding specs per inst (mean) 1.7279545915264545 | active direct arcs 3.0650719643219135 | active tank->CDU 3.7200486519359415
+glob obj:  {'mean': -928.5, 'min': -8937.1, 'max': 264.7}
