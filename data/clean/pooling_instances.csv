@@ -1,0 +1,9 @@
+name,probtype,objsense,best_known_obj,dualbound,gap,nvars,ncontvars,ncons,nquadcons,references,files
+haverly,QCP,min,-400.0,-400.0,0.0,12,12,9,3,"Haverly1978, AdhyaTawarmalaniSahinidis1999",data/raw/minlplib/gms/haverly.gms;data/raw/minlplib/osil/haverly.osil;data/raw/minlplib/py/haverly.py
+pooling_adhya1pq,QCP,min,-549.8030502,-549.8030645,2.6009313644336443e-08,33,33,49,20,"AdhyaTawarmalaniSahinidis1999, AlfakiHaugland2013",data/raw/minlplib/gms/pooling_adhya1pq.gms;data/raw/minlplib/osil/pooling_adhya1pq.osil;data/raw/minlplib/py/pooling_adhya1pq.py
+pooling_bental4pq,QCP,min,-450.0,-450.0,0.0,13,13,16,6,"BenTalEigerGershovitz1994, AlfakiHaugland2013",data/raw/minlplib/gms/pooling_bental4pq.gms;data/raw/minlplib/osil/pooling_bental4pq.osil;data/raw/minlplib/py/pooling_bental4pq.py
+pooling_foulds2pq,QCP,min,-1100.0,-1100.0,0.0,36,36,34,16,"FouldsHauglandJoernsten1992, AlfakiHaugland2013",data/raw/minlplib/gms/pooling_foulds2pq.gms;data/raw/minlplib/osil/pooling_foulds2pq.osil;data/raw/minlplib/py/pooling_foulds2pq.py
+pooling_haverly1pq,QCP,min,-400.0,-400.0,0.0,10,10,13,4,"Haverly1978, AlfakiHaugland2013",data/raw/minlplib/gms/pooling_haverly1pq.gms;data/raw/minlplib/osil/pooling_haverly1pq.osil;data/raw/minlplib/py/pooling_haverly1pq.py
+pooling_haverly2pq,QCP,min,-600.0,-600.0,0.0,10,10,13,4,"Haverly1978, AlfakiHaugland2013",data/raw/minlplib/gms/pooling_haverly2pq.gms;data/raw/minlplib/osil/pooling_haverly2pq.osil;data/raw/minlplib/py/pooling_haverly2pq.py
+pooling_haverly3pq,QCP,min,-750.0,-750.0,0.0,10,10,13,4,"Haverly1978, AlfakiHaugland2013",data/raw/minlplib/gms/pooling_haverly3pq.gms;data/raw/minlplib/osil/pooling_haverly3pq.osil;data/raw/minlplib/py/pooling_haverly3pq.py
+pooling_rt2pq,QCP,min,-4391.825893,-4391.82593,8.424741939763672e-09,34,34,52,18,"AudetHansenJaumardSavard2000, AlfakiHaugland2013",data/raw/minlplib/gms/pooling_rt2pq.gms;data/raw/minlplib/osil/pooling_rt2pq.osil;data/raw/minlplib/py/pooling_rt2pq.py

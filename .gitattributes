@@ -1,0 +1,3 @@
+data/raw/** -text
+*.xls binary
+*.xlsx binary
