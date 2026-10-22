@@ -57,3 +57,64 @@ Every assumption, deviation and adjustment made during the unattended run. Times
   1 thread per process.
 - **Result:** all 7 cases (haverly1–3, bental4, foulds2, adhya1, rt2) match MINLPLib to ≤ 1e-4 relative, with
   SCIP ≤ 0.4 s each. IPOPT hit rates from 20 random starts: 15%–95% (`results/validation.csv`).
+
+## Phase 2 — real-data instances (02:26–02:31)
+
+**Crude prices are MODELED, not observed.** No free daily prices exist for individual grades.
+
+- **Benchmark:** Brent (daily). WTI is not used, because of the −$37 day.
+- **Calibration data:** EIA monthly *landed* cost by API band (`land3`; 7 bands, midpoints 17.5…47.5).
+  Landed has better coverage than F.O.B.: the 40–45° F.O.B. band ends 2025-09 and the 45°+ band in 2017.
+  The difference from monthly-mean Brent is regressed with **month fixed effects**, which absorb freight and the
+  Brent basis; that intercept is not used in pricing.
+- **First attempt — joint API + sulfur fit — rejected.** Sulfur was taken from proxies: each band's median assay
+  sulfur from our 82 grades, plus EIA's Basrah Light stream with the BP Basrah Medium assay (28.1°, 3.54% S) as
+  the proxy for its 2021 successor. The fit gave **b = +1.29 $/bbl per %S** (SE 0.11), the wrong sign, and
+  +9…+18 in 2022–26. The likely cause is the Basrah proxy: historical Basrah Light was lighter than Basrah Medium,
+  so its price residual loads onto sulfur. Band-median sulfur is also non-monotone in API.
+  This fit is saved under `joint_api_sulfur_fit_rejected` in `results/price_model.json`.
+- **Used — API-only, by year:** price = Brent + a_y·(API − 35), with **b = 0**.
+  - a_y ranges 0.25–0.82 $/bbl per °API (all positive, SE ≤ 0.06). Yearly within-R² is 0.71 vs 0.66 pooled, so the
+    yearly coefficients are used.
+  - Days after the last EIA month (2026-07) use the 2026 coefficient.
+  - Consequence: the sulfur discount is only present to the extent sulfur correlates with API in imported crude.
+    Sour crudes are therefore probably somewhat over-priced relative to reality.
+  - Plot: `results/plots/price_model.png`.
+- **Crude worth from assay yields** (volume % on crude):
+  - LPG (≤C4; for BP, the remainder of the C5+ chain) → Mont Belvieu propane.
+  - Naphtha (≤150 °C) → USGC conventional gasoline.
+  - Kero (150–250 °C; BP 149–232) → USGC jet.
+  - Gas oil (250–370 °C; BP 232–369) → USGC ULSD.
+  - Atmospheric residue (370 °C+ / 369 °C+) → **0.85 × Brent per bbl** (assumption).
+  - Products: $/gal × 42. Volume gain/loss and processing cost are ignored.
+  - Propane has gaps inside the core panel; those are forward-filled.
+  - Missing TAN for 3 grades is set to the median of the 82 grades.
+- **Core panel:** 4,949 dates (2006-06-14 → 2026-10-20) where Brent, both gasolines, both ULSDs and jet are all
+  present. This is 55 more than the 4,894 in the data report, which also required WTI.
+- **Network** (per instance, fixed seed 20261022, `SeedSequence.spawn` per (date, sample)):
+  - **Crudes:** 6–8 from the 82, at least one with S > 1% and one light sweet, no two assays of the same grade.
+    Ordered by API.
+  - **3 tanks**, capacity 60 kbd ±10%. Each crude is linked to 1–2 random tanks, and each tank gets ≥ 2 crudes.
+    This breaks tank symmetry, so the optimal structure is learnable.
+  - **Both tanks feed both CDUs.** Direct crude→CDU pipelines exist with probability 0.3 per pair.
+  - **Availability:** U(15, 50) kbd per crude. **Handling cost:** U(0.10, 0.30) $/bbl per tank.
+  - **CDU-A** (sour-tolerant): 100 kbd, min 30% of capacity, S ≤ 2.0 wt%, API 26–36, TAN ≤ 0.8.
+    **CDU-B** (low-S): 80 kbd, min 30%, S ≤ 0.8, API 30–40, TAN ≤ 0.8.
+    Every number is jittered ×U(0.9, 1.1) per instance; the API window is kept ≥ 4° wide.
+  - Product (gasoline/diesel ppm) specs are deliberately NOT used.
+- **Tracked qualities** λ = (S·SG, SG, TAN·SG). Sulfur and TAN are mass-blended specs, SG is volume-blended
+  (API limits converted to SG). Objective is minimised: Σᵢ (costᵢ − worthᵢ)·Fᵢ + Σₗ hₗ·throughputₗ, in k$/day.
+- **9,898 instances** = 4,949 dates × 2 samples → `data/instances/instances.parquet`.
+
+## Phase 3 — smoke test (02:31–02:33)
+
+- 50 sample-0 instances evenly spaced over the panel (1–3 per year).
+- **SCIP:** 43 optimal + 7 stopped at the 1e-6 gap limit, so all 50 certified. Mean 0.75 s, max 3.1 s.
+- **IPOPT** (20 random starts each): every run ended "optimal", 0.11 s mean per start.
+  Hit rate 0.865, **trap rate 0.135**, infeasible endings 0. 15/50 instances had ≥ 1 trapped start, and no IPOPT
+  point beat SCIP. Full summary: `results/phase3/summary_round0.txt`.
+- **Trap rate ≥ 10%, so no difficulty adjustments were made** (round 0 only).
+- **Sizing:** about 240 instances/min on 19 workers, so all 9,898 take ~45 min. **N = all 9,898 instances**
+  (both samples, every date), far inside the 06:45 limit.
+- Trap is defined as: IPOPT ends at a feasible point (max violation ≤ 1e-5) whose objective is > 1e-4 (relative)
+  worse than SCIP's.

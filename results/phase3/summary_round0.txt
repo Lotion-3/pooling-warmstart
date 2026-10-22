@@ -1,0 +1,8 @@
+n 50 | SCIP status Counter({'optimal': 43, 'gaplimit': 7}) | certified 50
+SCIP time s: mean 0.75  p95 2.26  max 3.06
+IPOPT time/start s: mean 0.110  p95 0.200
+over certified: hit 0.865 | TRAP 0.135 | infeasible-end 0.000 | beats-global 0
+instances with trap>0: 15 / 50
+IPOPT terms [('optimal', 1000)]
+binding specs per inst (mean) 1.86 | active direct arcs 3.08 | active tank->CDU 3.5
+glob obj:  {'mean': -866.8, 'min': -5559.5, 'max': 84.7}
