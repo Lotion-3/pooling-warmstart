@@ -1,0 +1,18 @@
+03:31:06 varied: 9898 solved, 9866 certified (used)
+03:31:06 {'train': 5544, 'test': 3333, 'val': 989}
+03:31:07 training (b) flow MLP
+03:31:24   epoch   0 val 0.02188 best 0.02188
+03:31:27   epoch  25 val 0.01606 best 0.01556
+03:31:29   stopped at epoch 41, best val 0.01556
+03:31:29 training (c) flow MLP + KKT projection
+03:31:29   epoch   0 val 0.02125 best 0.02125
+03:31:34   epoch  25 val 0.01506 best 0.01446
+03:31:38   stopped at epoch 41, best val 0.01446
+03:31:38 training (e) structure classifier
+03:31:38   epoch   0 val 0.57152 best 0.57152
+03:31:44   epoch  25 val 0.40768 best 0.40521
+03:31:50   stopped at epoch 49, best val 0.40521
+03:31:51 classifier test: {'acc_all': 0.7961525306025146, 'acc_arcs': 0.7628589844589272, 'acc_specs': 0.8833258325832584, 'exact_pattern': 0.0051005100510051, 'val_loss': {'b': 0.01556460652500391, 'c': 0.01445569097995758, 'e': 0.40520891547203064}, 'inference_s_per_instance': {'b': 0.0005441500002052635, 'c': 0.00048128349997568877, 'e': 0.0003016590001061559}, 'n': {'train': 5544, 'val': 989, 'test': 3333}}
+03:31:51 evaluating 3333 test instances with 19 workers
+03:32:47 evaluation done in 0.9 min
+03:32:47 saved test_eval.parquet

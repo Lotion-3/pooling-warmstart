@@ -1,1 +1,10 @@
 2026-10-22 03:04:11 phase4 finished; starting fixed-network solve
+2026-10-22 03:30:44 fixed solve done; consolidating
+solved.parquet 9898 rows
+solved_fixed.parquet 9898 rows
+2026-10-22 03:30:46 phase5 varied
+2026-10-22 03:32:48 phase5 varied exit=0
+2026-10-22 03:32:48 phase5 fixed
+2026-10-22 03:35:15 phase5 fixed exit=0
+results.md and plots written
+2026-10-22 03:35:21 report exit=0; pipeline done

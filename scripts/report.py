@@ -94,6 +94,37 @@ def viol_detail(E):
     return "\n".join(out)
 
 
+def paired(E, ds):
+    """(d) vs (a) on the same instances: per-instance hit(d) - mean_over_starts hit(a); normal-approx 95% CI."""
+    diff = E.d_hit.astype(float).values - np.array([np.mean(h) for h in E.ip_hit])
+    m, se = diff.mean(), diff.std(ddof=1) / np.sqrt(len(diff))
+    a_inst = np.array([np.mean(h) for h in E.ip_hit])
+    lines = [f"- (d) − (a) hit rate, paired over {len(E)} instances: {100*m:+.2f} pp "
+             f"(95% CI {100*(m-1.96*se):+.2f} to {100*(m+1.96*se):+.2f} pp).",
+             f"- Instances where every random start hits: {100*np.mean(a_inst == 1):.1f}%; where (d) fails: "
+             f"{int((~E.d_hit).sum())}; of those, instances where the average random start also fails ≥ 50%: "
+             f"{int(((~E.d_hit) & (a_inst < 0.5)).sum())}.",
+             f"- (d) is faster than one random start on {100*np.mean(E.d_time.values < np.array([np.mean(t) for t in E.ip_time])):.1f}% "
+             f"of instances (mean {E.d_time.mean():.4f} s vs {np.mean([np.mean(t) for t in E.ip_time]):.4f} s).",
+             f"- Arc-structure Hamming distance of the MLP-implied active set (flow > 1 kbd) to the optimum: "
+             f"mean {E.loc[E.d_hit, 'ham_b_arcs'].mean():.2f} when (d) hits vs "
+             f"{E.loc[~E.d_hit, 'ham_b_arcs'].mean():.2f} when it fails; classifier distance {E.loc[E.d_hit, 'ham_clf'].mean():.2f} vs "
+             f"{E.loc[~E.d_hit, 'ham_clf'].mean():.2f}."]
+    if ds == "fixed":
+        Z = E.sort_values(["sample", "date"]).copy()
+        Z["changed"] = Z.groupby("sample")["true_struct"].transform(lambda s: s.ne(s.shift()))
+        Z = Z[Z.groupby("sample").cumcount() > 0]
+        for ch in (False, True):
+            G = Z[Z.changed == ch]
+            lines.append(f"- Optimal structure {'changed' if ch else 'unchanged'} vs previous test day (same network): "
+                         f"n = {len(G)}, (d) failures = {int((~G.d_hit).sum())} ({100*(1-G.d_hit.mean()):.2f}%), "
+                         f"(e) failures = {int((~G.e_hit).sum())} ({100*(1-G.e_hit.mean()):.2f}%), "
+                         f"random-start trap rate {100*G.ip_trap_rate.mean():.2f}%.")
+        lines.append(f"- Distinct optimal structures in the test period: "
+                     f"{Z.groupby('sample').true_struct.nunique().to_dict()} (per fixed network).")
+    return "\n".join(lines)
+
+
 def main():
     md = ["# Results", "",
           "All numbers below are computed by `scripts/report.py` from `results/<dataset>/test_eval.parquet`, "
@@ -122,7 +153,8 @@ def main():
                f"element accuracy {100*clf['acc_all']:.1f}% (arcs {100*clf['acc_arcs']:.1f}%, binding specs "
                f"{100*clf['acc_specs']:.1f}%); exact full-pattern match {100*clf['exact_pattern']:.1f}%.", "",
                f"(e) reduced-problem IPOPT terminations: {E.e_term.value_counts().to_dict()}", "",
-               "### By year (test)", "", by_year(E, clf), ""]
+               "### By year (test)", "", by_year(E, clf), "",
+               "### Paired comparison and failure analysis (test)", "", paired(E, ds), ""]
     (ROOT / "results" / "results.md").write_text("\n".join(md), encoding="utf-8")
 
     # ---- plot 1: hit rate by year
@@ -177,7 +209,7 @@ def main():
         cnt = [int(grp.loc[k, "count"]) if k in grp.index else 0 for k in (False, True)]
         axs[1].bar(labels, vals)
         for xx, (vv, cc) in enumerate(zip(vals, cnt)):
-            axs[1].text(xx, (vv if np.isfinite(vv) else 0) + 0.5, f"n={cc}", ha="center")
+            axs[1].text(xx, (vv if np.isfinite(vv) else 0) + 0.02 * np.nanmax(vals), f"n={cc}", ha="center")
         axs[1].set(title="Fixed networks: warm-start (d) failure rate", ylabel="% failed")
         axs[1].tick_params(axis="x", labelsize=8)
         txt.append(grp.to_dict())
@@ -198,7 +230,9 @@ def main():
         mth = S.groupby(pd.to_datetime(S.date).dt.to_period("M"))["ip_trap_rate"].mean()
         ax.plot(mth.index.to_timestamp(), 100 * mth.values, label=f"{ds} (monthly mean, n={len(S)})", lw=1)
         trap_stats[ds] = {"n": int(len(S)), "mean_trap": float(S.ip_trap_rate.mean()),
-                          "share_instances_trap>0": float((S.ip_trap_rate > 0).mean())}
+                          "share_instances_trap>0": float((S.ip_trap_rate > 0).mean()),
+                          "monthly_min": float(mth.min()), "monthly_max": float(mth.max()),
+                          "monthly_max_month": str(mth.idxmax())}
     ax.set(title="Trap rate over time: share of random-start IPOPT runs ending at a worse feasible local optimum",
            ylabel="%"); ax.legend()
     fig.tight_layout(); fig.savefig(PLOTS / "4_trap_rate_over_time.png", dpi=120); plt.close(fig)

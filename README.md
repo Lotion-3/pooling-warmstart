@@ -51,6 +51,8 @@ Then run the steps in order. Steps 5–7 take about 1 h total on 19 worker proce
 9. `python -P scripts/phase5.py --dataset varied`, then the same with `--dataset fixed`.
 10. `python -P scripts/report.py`: writes `results/results.md` and the plots.
 
+Steps 7–10 are chained in `scripts/pipeline_after_phase4.sh`, which waits for step 6 to finish.
+
 Parallel timings depend on the machine: 14 cores / 20 threads, 19 workers.
 
 ## Data sources and licences

@@ -2,7 +2,7 @@
 
 Every assumption, deviation and adjustment made during the unattended run. Times are local (EDT).
 
-## Phase 0 / 0.5 — setup (02:16–02:25)
+## Phase 0 / 0.5 — setup (02:16–02:20)
 
 - **Preflight:** git identity set (Laksh Agarwal <lakshagarwal65@gmail.com>). `poolingOptim/` held only
   `pooling_real/`, no root `.git`. 14 physical cores / 20 logical. OneDrive process not running.
@@ -43,7 +43,7 @@ Every assumption, deviation and adjustment made during the unattended run. Times
 - **Spec-violation scaling:** spec residuals are divided by the flow into the product, floored at 1% of the
   product's capacity, so products with ~0 flow don't produce huge ratios.
 
-## Phase 1 — formulation (02:30–02:50)
+## Phase 1 — formulation (02:20–02:26)
 
 - **`src/pooling.py`** holds the general model. Specs are written as Σᵢ (α·λᵢ + β)·Fᵢⱼ ≤ 0, so one form covers
   volume-blended bounds and mass-blended (S·SG / SG) specs. Builders: Pyomo pq (optionally with RLT rows), Pyomo p,
@@ -140,3 +140,56 @@ Every assumption, deviation and adjustment made during the unattended run. Times
   `data/solved/solved.parquet` / `solved_fixed.parquet` by `scripts/consolidate.py`.
 - **Timing caveat:** all timings were measured with 19 concurrent processes on 14 physical cores, so absolute
   times are inflated relative to a single idle core. That applies equally to SCIP and IPOPT.
+
+## Phase 5 — learning and evaluation (03:30–03:40)
+
+- **Compute finished early.** Phase 4 needed ~32 + 27 min instead of the overnight budget, so Phase 5 started at
+  03:30 rather than 06:45. No scope was cut: methods (a)–(f) were all run on the full test sets.
+- **Split by date:** train 2006–2017, validation 2018–2019, test 2020–2026. Only certified instances are used:
+  9,866 varied (5,544 / 989 / 3,333) and 9,898 fixed (5,568 / 990 / 3,340). The 32 infeasible instances are excluded.
+- **Encoding:**
+  - Crudes are sorted by API (canonical order) and placed into 8 fixed slots, padded and masked.
+  - Per crude: API, S, TAN, SG, cost − Brent, worth − Brent, margin, availability, tank links, direct-arc flags,
+    slot-used flag.
+  - Global: Brent, three product cracks + propane crack, tank caps, handling costs, 6 spec numbers per CDU.
+  - 135 inputs, standardised with train statistics.
+  - I chose sorting over DeepSets: simpler and adequate at ≤ 8 crudes.
+- **Targets:** flows x (crude→tank, from q·throughput), y, z, scaled /100 kbd. Predicted q = x shares per tank;
+  a tank with zero predicted inflow gets uniform q.
+- **Models:** MLP with 3×256 ReLU layers, dropout 0.1, AdamW (lr 1e-3, wd 1e-4), ReduceLROnPlateau, early stopping
+  on validation (patience 30, max 300 epochs). One seed (0), no hyperparameter search.
+  - (b) ReLU outputs × arc mask, MSE.
+  - (c) the same plus a **differentiable closed-form KKT projection** onto the tank mass-balance equalities,
+    restricted to existing arcs, trained end-to-end. Bounds are not part of the projection, so negative flows can
+    appear.
+  - (e) the same MLP trunk with sigmoid outputs for 46 arc-activity labels + 8 binding-spec labels (BCE, masked).
+- **Labels:**
+  - Arc active = flow > 1e-6 kbd in SCIP's solution.
+  - Spec binding = scaled slack ≤ 1e-5 and the CDU receives flow.
+  - The optimum is not always unique, so labels are those of SCIP's returned solution.
+- **(d) warm start:** the (b) prediction converted to (q, y, z) goes into IPOPT on the full pq problem (no RLT rows).
+- **(e) structure-first:**
+  - Threshold 0.5. Predicted-inactive y/z arcs are fixed to 0.
+  - Predicted-inactive crude→tank fractions are fixed to 0, but only if the tank is predicted in use and keeps
+    ≥ 1 crude.
+  - Predicted-binding specs become equalities.
+  - Start point: the (b) prediction.
+  - **No fallback to the full problem.** A failed or infeasible reduced solve counts as a miss, so (e) is judged
+    on its own.
+- **Extra baseline row (a20), best of 20 random starts:** added for context because it is the natural competitor
+  of a learned warm start.
+- **Timing:**
+  - Solver call only (Pyomo model build excluded for every method); NN single-instance inference time is added.
+  - (e) uses its solver time plus inference.
+  - Phase 5 evaluation ran with 19 parallel workers, the same load as Phase 4, so (d)/(e) vs (a)/(f) times are
+    comparable.
+- **Plot 3:**
+  - "Structure changed" is computed on the fixed-network set: the optimal active-arc + binding-spec pattern
+    differs from the previous **test** date of the same network.
+  - For the varied set only the predicted-vs-true Hamming distance is shown, because consecutive dates have
+    different networks.
+  - The MLP-implied structure uses predicted flow > 1 kbd.
+- **(d) vs (a) significance:** paired per instance, hit(d) − mean over the 20 starts of hit(a), with a
+  normal-approximation 95% CI.
+- **Test artifacts from a debug run (random split, 20 epochs) were deleted** before any results were written.
+  The `--debug-random-split` flag remains in `scripts/phase5.py`, writing to `results/_debug/`.

@@ -1,0 +1,23 @@
+{
+ "trap": {
+  "varied": {
+   "n": 9866,
+   "mean_trap": 0.1220910196634908,
+   "share_instances_trap>0": 0.3152240016217312,
+   "monthly_min": 0.023809523809523808,
+   "monthly_max": 0.2975609756097561,
+   "monthly_max_month": "2014-06"
+  },
+  "fixed": {
+   "n": 9898,
+   "mean_trap": 0.09166498282481308,
+   "share_instances_trap>0": 0.18741159830268742,
+   "monthly_min": 0.0,
+   "monthly_max": 0.40454545454545454,
+   "monthly_max_month": "2012-03"
+  }
+ },
+ "fixed_change": [
+  "{'mean': {False: 0.9987780040733197, True: 0.9852774631936579}, 'count': {False: 2455, True: 883}}"
+ ]
+}
