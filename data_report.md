@@ -15,10 +15,14 @@ To rebuild the clean files from raw: `python -P scripts/clean.py`.
 | EIA v2 API, fallback B | Not tried | — | — | Not needed, so no key required |
 | **ExxonMobil crude assays** (`corporate.exxonmobil.com`) | ❌ **HTTP 403 "Access Denied"** from AkamaiGHost on every URL, including `/` and `/robots.txt` | Nothing | — | Bot protection blocks the whole domain for scripted clients. I did not try to get around it. |
 | **Equinor crude oil assays** (`equinor.com/energy/crude-oil-assays`) | ✅ HTTP 200 (765 KB, Next.js page with server-rendered table) | Summary table (46 grades: issue date, name, description, country, API) plus **all 46 per-grade XLSX assays** (2.8 MB, `cdn.sanity.io`, all HTTP 200) | Assay issue dates 2015-08 → 2026-10 | The page table has **no numeric sulfur**, so sulfur comes from the XLSX files. The XLSX links sit behind a JS dialog button but are in the embedded page JSON, so no JS rendering was needed. |
+| **BP crude assays** (`bp.com/.../technical-downloads/crudes-assays.html`) | ✅ HTTP 200 (old `.../bp-global-energy-trading/...crude-assays.html` URL now redirects to the bp homepage) | **36 per-grade assay files** (1.9 MB), including Middle East sour grades | Sample dates 2012-02 → 2026-01 | Mixed real `.xls` and `.xlsx` saved as `.xls` (pandas detects which). No API row, so API is computed from density. Two sheets (Azeri, Thunder Horse) have a stray second copy of the table; the labeled one is used. |
 | **MINLPLib** (`minlplib.org`) | ✅ HTTP 200 (instances.html 1.4 MB, `instancedata.csv`) | 89 instances tagged "Pooling problem". Downloaded 8 in `.gms`, `.osil` and `.py` (Pyomo) formats, plus metadata with best-known objective values | — | None |
+| **EIA monthly import / acquisition costs** (7 tables) | ✅ HTTP 200 | Page + Excel for each: landed and F.O.B. costs by area, by crude stream (22 and 14 named streams) and **by API gravity**, plus refiner acquisition cost | 1973/1983 → 2026-07 (RAC → 2026-08) | Raw only, not cleaned yet. Monthly, $/bbl. |
+| **eCFR 40 CFR Part 1090** (US fuel rules) | ✅ HTTP 200 via official eCFR API | Full Part 1090 XML (589 KB, 191 sections), current to 2026-10-20 | — | Specs to be read by hand: gasoline S ≤ 10 ppm average / 80 ppm per gallon at refinery gate (§1090.205); ULSD S ≤ 15 ppm, cetane index ≥ 40 or aromatics ≤ 35 vol% (§1090.305) |
+| ASTM D975 / D4814 / D1655 (diesel, gasoline, jet specs) | ✅ pages load (`store.astm.org`) | Not downloaded | — | Paywalled standards |
 
 **Fallbacks used:** none for prices (the primary EIA Excel worked) or benchmarks. For assays,
-ExxonMobil failed and Equinor succeeded; within Equinor I used the "per-grade XLS" route to get sulfur.
+ExxonMobil failed. Equinor and BP both succeeded; for each I used the per-grade XLS files to get sulfur.
 
 ## 1. EIA daily spot prices → `data/clean/prices_daily.csv`
 
@@ -61,9 +65,16 @@ weekly/monthly/annual values are unweighted averages of daily closing spot price
 
 ## 2. Crude assays → `data/clean/crudes.csv`
 
-46 Equinor grades. Required columns are `name, api, sulfur_pct, type, region, source`. Extra columns:
-`country, equinor_description, api_page_table, density_15c_g_cc, tan_mgkoh_g, visc_40c_cst, pour_point_c,
-vanadium_ppm, nickel_ppm, assay_name, issue_date, n_cut_columns, raw_file, url`.
+82 rows: 46 Equinor and 36 BP assays. Grades that both companies publish (17 of them) appear once per
+source; `source` tells them apart. Required columns are `name, api, sulfur_pct, type, region, source`.
+Extra columns: `country, equinor_description, api_page_table, density_15c_g_cc, tan_mgkoh_g, visc_40c_cst,
+pour_point_c, vanadium_ppm, nickel_ppm, assay_name, issue_date (Equinor), sample_date (BP), n_cut_columns,
+api_derived_from_density, duplicate_table_in_sheet, raw_file, url`.
+
+Overall coverage: 36 light sweet, 6 light sour, 11 medium sweet, 20 medium sour, 3 heavy sour, 6 condensates.
+API runs 14.3–68.6 and sulfur 0.002–4.12%.
+
+### Equinor (46 grades)
 
 - `api` and `sulfur_pct` are **whole-crude** values from each XLSX "Summary" sheet (the IBP→FBP column).
   API from the XLSX matches the page table to 0.1° for all 46 grades.
@@ -82,6 +93,21 @@ vanadium_ppm, nickel_ppm, assay_name, issue_date, n_cut_columns, raw_file, url`.
 and Equinor accepts no liability for any loss occurring from the use of these assays and errors that they
 may contain."* The site footer links to general Terms and conditions (`equinor.com/about-us/terms-and-conditions`),
 which I didn't review in detail.
+
+### BP (36 grades)
+
+- Whole-crude values come from the IBP→FBP column of the "Summary" sheet, with 13 cut columns per file.
+  BP gives density at 15 °C but no API, so `api = 141.5 / (ρ15 / 0.99904) − 131.5` (`api_derived_from_density = True`).
+- **Cross-check against Equinor** on the 17 shared grades: API differs by at most 1.4° (Ekofisk, Kissanje),
+  and sulfur by at most 0.34 points (Southern Green Canyon, 2.52 vs 2.18). That's consistent with different
+  sample dates, and it confirms the density→API conversion.
+- New sour grades: **Basrah Heavy** (23.7°, 4.12% S), **Basrah Medium** (28.1°, 3.54%), **Kirkuk** (34.1°, 2.24%),
+  **Oman Export** (33.1°, 1.29%), Murban (39.9°, 0.77%), Thunder Horse (34.2°, 0.70%).
+  Basrah Heavy falls just inside "medium" on the API cutoffs despite its name.
+- Quality: vanadium/nickel are blank for 11 light grades (reported as "-"). Alvheim has no sample date.
+  Some assays are old (Kirkuk and Basrah Heavy 2015, North West Shelf Condensate 2012).
+- **Terms:** the page states the material is "provided for informational purposes only… bp makes no
+  representations or warranties… regarding the accuracy… bp accepts no liability in connection with any of such information."
 
 ## 3. Pooling benchmarks → `data/raw/minlplib/` and `data/clean/pooling_instances.csv`
 
@@ -103,20 +129,32 @@ instances (tp/stp formulations, the larger `pooling_digabel*`, `pooling_epa*`, `
 be downloaded the same way (`https://www.minlplib.org/{gms|osil|py}/<name>.<ext>`).
 **Terms:** MINLPLib is licensed CC BY 4.0, so cite MINLPLib and the original papers.
 
+## 4. Added in the second pass (raw only, not cleaned yet)
+
+- `data/raw/eia_monthly/`: 7 EIA monthly tables (page + Excel each).
+  - Landed costs: `land1` by area, `land2` by 22 named crude streams, `land3` by API gravity band.
+  - F.O.B. costs: `imc1` by area, `imc2` by 14 named streams, `imc3` by API gravity band.
+  - `rac2`: refiner acquisition cost.
+  - All are $/bbl monthly, starting 1973/1983. The API-gravity bands are the natural basis for quality price differentials.
+- `data/raw/ecfr/40CFR1090_2026-10-20.xml`: full U.S. fuel regulation, public domain.
+- `data/raw/bp/`: BP page + 36 assays, cleaned into `crudes.csv` above.
+
 ## What's still missing and how to get it
 
-1. **ExxonMobil assays (blocked by 403).** Open
-   https://corporate.exxonmobil.com/what-we-do/energy-supply/crude-trading/assays in a normal browser.
-   Either save the page (Ctrl+S, "Webpage, complete") or download a few per-grade XLS files, and drop them
-   in `data/raw/exxon/`. I can then parse them. This would add the heavy-sour grades Equinor lacks
-   (e.g. Canadian heavies such as Kearl and Cold Lake).
-2. **Very heavy / very sour benchmarks.** Equinor has only 3 heavy sour grades, and nothing above 2.6% S
-   or below 14° API. For a wider quality range: ExxonMobil (above), or BP's assay page
-   (bp.com, "crude assays"), which I didn't test.
-3. **Crude-specific prices.** EIA spot data covers WTI and Brent only. There are no free daily prices for
-   individual grades (Mars, Johan Sverdrup, etc.); those come from paid services (Argus, Platts).
-   A simple stand-in is Brent/WTI ± a fixed quality differential per °API and %S. EIA's *monthly* "Landed
-   costs of imported crude by API gravity / sulfur" tables would let us calibrate those differentials.
-   They aren't downloaded yet but sit on the same EIA site.
-4. **Product quality specs** (e.g. ULSD ≤ 15 ppm S, jet freeze point) for the pooling constraints come
-   from regulations and standards, not datasets. They are easy to write down by hand when we build the model.
+1. **ExxonMobil assays (blocked by 403):**
+   https://corporate.exxonmobil.com/what-we-do/energy-supply/crude-trading/assays
+   Open it in a normal browser, download the per-grade files (or save the page with Ctrl+S) into
+   `data/raw/exxon/`, and I'll parse them. This would add Canadian heavies (e.g. Kearl, Cold Lake) and fill
+   the gap below 14° API that neither Equinor nor BP covers.
+2. **Daily prices for individual crude grades.** These are paid only:
+   Argus https://www.argusmedia.com/en and S&P Global Platts https://www.spglobal.com/commodity-insights/en
+   (Platts returns 403 to scripts but works in a browser). The free substitute is Brent/WTI ± a quality
+   differential calibrated on the EIA monthly gravity-band and named-stream tables above.
+3. **Full product specs beyond the federal limits** (jet freeze point, distillation, octane, RVP by season)
+   are in paid ASTM standards:
+   - Diesel D975: https://store.astm.org/d0975-23.html
+   - Gasoline D4814: https://store.astm.org/d4814-23.html
+   - Jet D1655: https://store.astm.org/d1655-24.html
+
+   The key numbers are widely quoted, so for the model we can hard-code a handful of them
+   (e.g. Jet A freeze point ≤ −40 °C, ULSD ≤ 15 ppm S) without buying the standards.
