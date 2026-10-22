@@ -1,3 +1,5 @@
 data/raw/** -text
 *.xls binary
 *.xlsx binary
+# downloaded and generated data: exclude from GitHub's language statistics
+data/** linguist-vendored

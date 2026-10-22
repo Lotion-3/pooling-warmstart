@@ -1,2 +1,9 @@
 __pycache__/
 *.pyc
+# third-party files that are not redistributed; fetch with scripts/get_equinor.py, get_bp.py, get_gamslib.py
+data/raw/equinor/
+data/raw/bp/
+data/raw/exxon/
+data/raw/gamslib/
+# local debug output of scripts/phase5.py --debug-random-split
+results/_debug/
