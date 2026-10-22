@@ -13,9 +13,13 @@ reuses 2 fixed networks on every date.
   global-optimum hit rate):
   - Fixed networks: 99.5% learned vs 94.9% random start.
   - A new network per instance: 91.0% vs 89.5% (paired +1.57 pp, 95% CI +0.77 to +2.37).
+- **Where learning breaks:** on the fixed networks, warm starts failed on 1.47% of test days when the optimal
+  structure changed from the previous day, vs 0.12% when it didn't. Small counts: 13 of 883 vs 3 of 2,455 days.
 - **The local solver does get trapped:** 12.2% of random-start IPOPT runs end at a worse local optimum.
-- **Speed:** warm-started IPOPT takes 0.1248 s per instance vs 0.9177 s for SCIP. SCIP also certifies optimality,
-  and these instances are easy for it.
+- **Speed:** warm-started IPOPT takes 0.1248 s per instance vs 0.9177 s for SCIP.
+- **For context, simple alternatives already do well here:** 20 random starts reach 99.7% in 2.6102 s, and SCIP
+  certifies the optimum in 0.9177 s. These instances are easy, so the value here is the measurement, not a
+  speedup. Harder instances are the natural next step.
 - **KKT projection layer:** mass balances are met exactly (residual p95 7.63e-06 kbd). The bilinear quality
   constraints are outside its scope and stay violated (mean 0.175), so no raw prediction is feasible on its own.
 
