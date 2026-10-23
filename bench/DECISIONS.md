@@ -282,3 +282,18 @@ Every judgement call made while building the suite, in the order it was made.
 - **Fix.** scale_i := max(scale_i, 1e-3 × median_i scale_i), recorded as `rows_scale_floored` in each gate. The other
   10 domains have no row below the floor, so their numbers are unchanged. metabolic and water_network were stopped and
   restarted at 04:00. Their gates still pass: metabolic 1.69e-13 (was 3.24e-13), water_network 2.73e-16.
+
+## Ablation beyond the main protocol (04:55): the projection metric
+
+- **Why.** In the finished domains, (d) stopped early (truss ≈ 57 epochs vs ≈ 300 for (a)) and was often less
+  accurate than (a). (c) never worsened the pooled original-units error but inflated per-output nRMSE on domains
+  with multi-scale outputs (combustion, county_population, building_end_use). Both point to the projection metric:
+  the specified projection is Euclidean in ORIGINAL units, while the loss and the nRMSE weight outputs by 1/std.
+- **What.** `bench/ablation.py` adds c_w and d_w: the same KKT projection weighted by the training variance of each
+  output, i.e. the closest feasible point in STANDARDISED units, K = D·pinv(A·D) with D = diag(train std); constant
+  outputs have std floored at 1. Constraint satisfaction is identical; only the direction of the correction changes.
+  This is still not the "common bug" (original A applied to standardised outputs): the outputs are de-standardised,
+  and the constraint is exactly A y + B x = b.
+- **Protocol.** c_w uses the main run's saved (a) predictions (float32). d_w retrains with the same seeds, split,
+  standardisation, backbone and early stopping. Results go to `ablation_weighted.json` and are reported in a
+  separate section, labelled as beyond the original protocol. The main (c)/(d) results are unchanged.

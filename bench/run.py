@@ -55,9 +55,15 @@ class Projector:
     """Euclidean projection onto {y : A y + B x = b} in original units (float64).
     y = yhat - K (A yhat + B x - b) with K = A'(AA')^-1 = pinv(A) for full-row-rank A."""
 
-    def __init__(self, A, B, b):
+    def __init__(self, A, B, b, w=None):
+        """w (optional, q): weights of a weighted projection, min sum (y - yhat)^2 / w s.t. the equalities.
+        w = None is the plain Euclidean projection in original units used by models (c) and (d)."""
         self.A, self.B, self.b = A, B, b
-        self.K = np.linalg.pinv(A)                     # q x m
+        if w is None:
+            self.K = np.linalg.pinv(A)                 # q x m
+        else:
+            D = np.sqrt(np.asarray(w, float))
+            self.K = D[:, None] * np.linalg.pinv(A * D[None, :])
         self.P = np.eye(A.shape[1]) - self.K @ A       # q x q
 
     def __call__(self, yhat, x):
