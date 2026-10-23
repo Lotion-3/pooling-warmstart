@@ -11,3 +11,4 @@ results/_debug/
 bench/data/raw/
 bench/data/cache/
 bench/results/**/*.lock
+bench/results/**/test_predictions.npz

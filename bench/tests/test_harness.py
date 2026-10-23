@@ -80,6 +80,7 @@ def test_end_to_end():
     assert s["c"]["eq_viol_max"] < 1e-9 and s["d"]["eq_viol_max"] < 1e-9, (s["c"], s["d"])
     assert s["a"]["eq_viol_pct_above_1e-5"] > 50
     assert s["d"]["nrmse"] < 0.05, s["d"]["nrmse"]
+    assert s["c"]["pooled_nrmse"] <= s["a"]["pooled_nrmse"] + 1e-12   # guaranteed in original units
     # projecting onto a set that contains the truth can only reduce the per-sample Euclidean error in
     # ORIGINAL units (nRMSE, which averages per-output errors / std, has no such guarantee)
     d = toy.load()
