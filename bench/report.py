@@ -29,6 +29,7 @@ SHORT = {"metabolic": "COBRApy e_coli_core, pFBA", "water_network": "WNTR, EPANE
          "building_end_use": "NREL ResStock 2025.1 (OEDI)", "bank_balance_sheets": "FDIC BankFind API",
          "food_balance": "FAOSTAT FBS", "company_financials": "SEC EDGAR FS data sets",
          "county_population": "Census county estimates", "heat_exchanger_network": "numpy HEN, eps-NTU"}
+DW_COLOR = "#6250d6"
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 
 
@@ -88,18 +89,29 @@ def plots(ok):
     # 1. nRMSE(d)/nRMSE(a): 1 + (d - a)/a with the bootstrap CI of (d - a) scaled by a
     fig, ax = plt.subplots(figsize=(7.5, 0.45 * len(names) + 1.4), facecolor=SURFACE)
     style(ax)
+    abl = {k: json.loads((RESULTS / k / "ablation_weighted.json").read_text())
+           for k in names if (RESULTS / k / "ablation_weighted.json").exists()}
     for i, k in enumerate(names):
         a = ok[k]["aggregate"]["a"]["nrmse_mean"]
-        bs = ok[k]["bootstrap"]["d_minus_a"]
-        r, lo, hi = 1 + bs["diff"] / a, 1 + bs["ci_lo"] / a, 1 + bs["ci_hi"] / a
-        ax.plot([lo, hi], [i, i], color=COLORS["d"], lw=2, solid_capstyle="round")
-        ax.plot(r, i, "o", ms=8, color=COLORS["d"], mec=SURFACE, mew=2)
-        ax.annotate(f"{r:.3f}", (hi, i), xytext=(6, 0), textcoords="offset points", va="center", color=INK2, fontsize=8)
+        for key, src, col, dy, lab in (("d_minus_a", ok[k]["bootstrap"], COLORS["d"], -0.15, "(d) KKT-hPINN"),
+                                       ("d_w_minus_a", abl.get(k, {}).get("bootstrap", {}), DW_COLOR, 0.15,
+                                        "d_w: variance-weighted projection (ablation)")):
+            if key not in src:
+                continue
+            bs = src[key]
+            r, lo, hi = 1 + bs["diff"] / a, 1 + bs["ci_lo"] / a, 1 + bs["ci_hi"] / a
+            ax.plot([max(lo, 1e-3), hi], [i + dy, i + dy], color=col, lw=2, solid_capstyle="round")
+            ax.plot(r, i + dy, "o", ms=7, color=col, mec=SURFACE, mew=1.5, label=lab if i == 0 else None)
+            ax.annotate(f"{r:.3g}", (hi, i + dy), xytext=(5, 0), textcoords="offset points", va="center",
+                        color=INK2, fontsize=7)
     ax.axvline(1.0, color=INK2, lw=1, ls="--")
+    ax.set_xscale("log")
     ax.set_yticks(range(len(names)), names)
-    ax.set_xlabel("nRMSE (d) / nRMSE (a)   (< 1: KKT-hPINN more accurate than the plain MLP)", color=INK)
-    ax.set_title("Accuracy of the hard-constrained model relative to the plain MLP\n"
+    ax.set_xlabel("nRMSE / nRMSE (a), log scale   (< 1: more accurate than the plain MLP)", color=INK)
+    ax.set_title("Accuracy of the hard-constrained models relative to the plain MLP\n"
                  "(mean over seeds; bars: 95% bootstrap CI over test points)", color=INK, fontsize=10, loc="left")
+    ax.legend(frameon=False, fontsize=8, loc="upper center", bbox_to_anchor=(0.4, -0.08 - 0.5 / len(names)),
+              ncol=2, labelcolor=INK)
     fig.tight_layout()
     fig.savefig(pdir / "1_rmse_ratio_d_over_a.png", dpi=150)
     plt.close(fig)
@@ -130,14 +142,14 @@ def plots(ok):
     fig, ax = plt.subplots(figsize=(7.5, 4.8), facecolor=SURFACE)
     style(ax)
     ax.grid(axis="y", color=GRID, lw=0.8)
-    for k in names:
+    for j, k in enumerate(names):
         c = ok[k]["aggregate"]["c"]["nrmse_mean"]
         bs = ok[k]["bootstrap"]["d_minus_c"]
         x = ok[k]["rank"]["ratio"]
         y, lo, hi = 100 * bs["diff"] / c, 100 * bs["ci_lo"] / c, 100 * bs["ci_hi"] / c
         ax.plot([x, x], [lo, hi], color=COLORS["d"], lw=2, solid_capstyle="round")
         ax.plot(x, y, "o", ms=8, color=COLORS["d"], mec=SURFACE, mew=2)
-        ax.annotate(k, (x, y), xytext=(6, 4), textcoords="offset points", fontsize=8, color=INK)
+        ax.annotate(k, (x, y), xytext=(6, 4 if j % 2 else -11), textcoords="offset points", fontsize=8, color=INK)
     ax.axhline(0, color=INK2, lw=1, ls="--")
     ax.set_xlabel("rank(A) / q   (share of output directions fixed by the constraints)", color=INK)
     ax.set_ylabel("(nRMSE(d) − nRMSE(c)) / nRMSE(c)  [%]", color=INK)
