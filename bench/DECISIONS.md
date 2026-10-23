@@ -314,3 +314,14 @@ Every judgement call made while building the suite, in the order it was made.
 - **Gate.** Max 3.25e-7 (pass, no projection). Only 4 samples are above 1e-8.
 - **Threads.** It started last (05:12) on an otherwise idle machine, so it trains with 4 torch threads instead of 1.
   This changes only wall time.
+
+### fermentation (tier 3, added because time allowed)
+- **Model.** Batch yeast fermentation in C-mol with three carbon-conserving pathways: growth (glucose → Yxs biomass +
+  (1 − Yxs) CO2), ethanol (3 C glucose → 2 C ethanol + 1 C CO2) and glycerol (1 C → 1 C). Monod uptake, ethanol
+  product inhibition, growth-coupled glycerol.
+- **Solver.** LSODA, rtol 1e-10, atol 1e-12; 0 failed integrations.
+- **Inputs.** mu_max, Ks, Yxs, q_e, K_i, q_g, S0, X0 (ranges in meta).
+- **Outputs.** The 5 carbon pools at 20 times (0.5–48 h).
+- **Equality.** Total carbon = S0 + X0 at each time (20 rows, rank 0.2·q). Gate 2.5e-15.
+- **Note.** Labels contain integrator round-off negatives down to −3.8e-14 C-mol/L; they were not altered.
+- **Threads.** Trains with 4 threads (idle machine); wall time only.
