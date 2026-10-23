@@ -325,3 +325,18 @@ Every judgement call made while building the suite, in the order it was made.
 - **Equality.** Total carbon = S0 + X0 at each time (20 rows, rank 0.2·q). Gate 2.5e-15.
 - **Note.** Labels contain integrator round-off negatives down to −3.8e-14 C-mol/L; they were not altered.
 - **Threads.** Trains with 4 threads (idle machine); wall time only.
+
+## Harness change during the run (05:28): outputs constant in training are not scored
+
+- **Problem.** In fermentation, glucose at 48 h is ~0 in training (std 3.85e-13, below the 1e-12 floor, so training
+  treats it as constant) but has std 7e-8 on the test set. That one output contributed ≈ 2,120 to the mean nRMSE of
+  (a) (≈ 1,700–1,780 per seed; median per-output ratio 0.046).
+- **Fix.** An output is now scored only if it is non-constant on both the train and the test set (run.py and
+  ablation.py). A check over all 14 trained domains found fermentation to be the only one with such an output, so the
+  other domains are unchanged. fermentation and its ablation were re-run; with the machine idle by then, seed 0
+  trained in under 5 minutes, so the seed rule gave 5 seeds.
+
+## Scope cut (requested)
+
+- The remaining write-up was cut short on request. bench/README.md and the root README section were written;
+  bench/findings.md was not.
