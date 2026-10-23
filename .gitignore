@@ -7,3 +7,7 @@ data/raw/exxon/
 data/raw/gamslib/
 # local debug output of scripts/phase5.py --debug-random-split
 results/_debug/
+# benchmark suite: downloaded files (fetch with bench/scripts/) and regenerable sample caches
+bench/data/raw/
+bench/data/cache/
+bench/results/**/*.lock
