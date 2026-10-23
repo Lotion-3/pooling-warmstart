@@ -1,0 +1,10 @@
+05:28:21 [fermentation] n=20000 p=8 q=100 m=20 rank=20 (0.200 q); gate pass max=2.523e-15 projected=False
+05:28:42 [fermentation] tune lam=0.1: val nRMSE 177398.31537 (20.0s)
+05:29:02 [fermentation] tune lam=1.0: val nRMSE 203138.56589 (19.6s)
+05:29:21 [fermentation] tune lam=10.0: val nRMSE 285513.47804 (18.5s)
+05:30:35 [fermentation] seed 0: nRMSE a=0.08011 b=0.08949 c=0.17554 d=0.14320  pooled a=0.04995 c=0.04834 d=0.08818  viol% a=100.0 c=0.0 d=0.0 (74s)
+05:32:02 [fermentation] seed 1: nRMSE a=0.08554 b=0.08479 c=0.24798 d=0.16276  pooled a=0.05725 c=0.05497 d=0.10484  viol% a=100.0 c=0.0 d=0.0 (87s)
+05:33:21 [fermentation] seed 2: nRMSE a=0.09004 b=0.08364 c=0.20332 d=0.17188  pooled a=0.05767 c=0.05594 d=0.11339  viol% a=100.0 c=0.0 d=0.0 (80s)
+05:35:06 [fermentation] seed 3: nRMSE a=0.07604 b=0.08843 c=0.18302 d=0.16061  pooled a=0.04814 c=0.04612 d=0.10461  viol% a=100.0 c=0.0 d=0.0 (105s)
+05:36:39 [fermentation] seed 4: nRMSE a=0.08459 b=0.08799 c=0.20697 d=0.14616  pooled a=0.05516 c=0.05282 d=0.09503  viol% a=100.0 c=0.0 d=0.0 (92s)
+05:36:45 [fermentation] done in 503s

@@ -106,6 +106,12 @@ fixed-network variant) for studying it.
 - Not tested: the decision-rule method and nonlinear correction steps for the projected predictions. The projected
   predictions (c) were also not used as warm starts; only the plain MLP prediction (b) was.
 
+## Benchmark suite
+
+[bench/](bench/README.md) tests the same KKT projection layer on 14 domains beyond pooling, from metabolism and power
+grids to bank balance sheets. The layer satisfies the linear equalities exactly in every domain. Its accuracy
+relative to a standard MLP depends on how the projection is scaled; see [bench/README.md](bench/README.md).
+
 ## Layout
 
 | path | content |

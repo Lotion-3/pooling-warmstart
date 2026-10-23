@@ -1,0 +1,8 @@
+04:00:05 [water_network] n=20000 p=59 q=119 m=92 rank=92 (0.773 q); gate pass max=2.726e-16 projected=False
+04:09:17 [water_network] tune lam=0.1: val nRMSE 0.01980 (534.9s)
+04:17:55 [water_network] tune lam=1.0: val nRMSE 0.01741 (517.6s)
+04:25:18 [water_network] tune lam=10.0: val nRMSE 0.01989 (442.2s)
+04:34:47 [water_network] seed 0: nRMSE a=0.02970 b=0.01696 c=0.01909 d=0.01445  pooled a=0.01849 c=0.01125 d=0.00860  viol% a=100.0 c=0.0 d=0.0 (570s)
+04:48:48 [water_network] seed 1: nRMSE a=0.01866 b=0.02190 c=0.01316 d=0.01599  pooled a=0.01216 c=0.00756 d=0.00967  viol% a=100.0 c=0.0 d=0.0 (840s)
+05:03:39 [water_network] seed 2: nRMSE a=0.02457 b=0.02068 c=0.01776 d=0.01434  pooled a=0.01538 c=0.00973 d=0.00867  viol% a=100.0 c=0.0 d=0.0 (892s)
+05:03:56 [water_network] done in 3828s

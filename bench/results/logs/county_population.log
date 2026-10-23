@@ -1,0 +1,8 @@
+03:43:51 [county_population] n=40863 p=9 q=9 m=4 rank=4 (0.444 q); gate pass max=0.000e+00 projected=False
+03:45:25 [county_population] tune lam=0.1: val nRMSE 0.72082 (85.9s)
+03:46:41 [county_population] tune lam=1.0: val nRMSE 0.76490 (75.5s)
+03:47:59 [county_population] tune lam=10.0: val nRMSE 0.79381 (78.0s)
+03:53:26 [county_population] seed 0: nRMSE a=0.56198 b=0.54768 c=46.81953 d=8.21008  pooled a=0.20384 c=0.13405 d=0.03379  viol% a=100.0 c=0.0 d=0.0 (327s)
+04:01:19 [county_population] seed 1: nRMSE a=0.44590 b=0.44628 c=40.47838 d=7.11452  pooled a=0.17542 c=0.11391 d=0.03543  viol% a=100.0 c=0.0 d=0.0 (473s)
+04:12:00 [county_population] seed 2: nRMSE a=0.43420 b=0.44502 c=43.48256 d=7.18509  pooled a=0.18790 c=0.12170 d=0.02922  viol% a=100.0 c=0.0 d=0.0 (641s)
+04:12:07 [county_population] done in 1694s

@@ -1,0 +1,4 @@
+04:58:44 [dc_power_flow] seed 0: nRMSE c_w=0.01154 d_w=0.01143 (main a=0.02569 c=0.013102 d=0.012268) viol% d_w=0.0 epochs 120
+05:05:47 [dc_power_flow] seed 1: nRMSE c_w=0.01129 d_w=0.01016 (main a=0.02621 c=0.013033 d=0.011773) viol% d_w=0.0 epochs 188
+05:08:12 [dc_power_flow] seed 2: nRMSE c_w=0.01046 d_w=0.01312 (main a=0.02456 c=0.012667 d=0.011895) viol% d_w=0.0 epochs 97
+05:08:24 [dc_power_flow] ablation done

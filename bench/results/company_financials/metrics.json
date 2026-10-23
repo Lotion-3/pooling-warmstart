@@ -1,0 +1,60 @@
+{
+ "domain": "company_financials",
+ "meta": {
+  "source": "SEC EDGAR Financial Statement Data Sets (DERA), quarterly zips https://www.sec.gov/files/dera/data/financial-statement-data-sets/YYYYqN.zip, quarters 2012q1..2025q2 (Q1 and Q2 of each year only, 28 zips, ~2.7 GB), index https://www.sec.gov/dera/data/financial-statement-data-sets; downloaded 2026-10-23 (see download_log.txt)",
+  "license": "Data extracted by the SEC from filers' XBRL exhibits; SEC EDGAR content is U.S. federal government information, generally public domain in the U.S. (17 U.S.C. 105) with no account needed; underlying statements are the filers' own disclosures. Access is subject to the SEC fair-access policy (declared User-Agent, < 10 requests/s). SEC states the data sets are provided as-is, without warranty of accuracy.",
+  "tier": 2,
+  "units": "USD (original units, no scaling or log transform)",
+  "generation": "sub.txt: form 10-K with fp FY. num.txt: qtrs 0, uom USD, coreg and segments empty, us-gaap version, ddate equal to the filing's period (balance-sheet date). Per filer and balance-sheet date the latest accepted 10-K is kept. A filing is used only if it tags Assets, Liabilities, StockholdersEquity and LiabilitiesAndStockholdersEquity (presence filter only, never a residual filter). Sample = filings t and t+1 of the same CIK with balance-sheet dates 11-13 months apart; X = year-t values (untagged MinorityInterest / equity incl. NCI / temporary equity / commitments / current items / cash enter as 0), Y = year-(t+1) outputs. Split key t = calendar year of the year-t balance-sheet date (2011-2023). Imposed identity: Assets = LiabilitiesAndStockholdersEquity. The second identity LSE = Liabilities + (equity incl. NCI, or StockholdersEquity + MinorityInterest) + temporary equity + CommitmentsAndContingencies was measured but not imposed (fails for a sizeable share of filings). Labels are the values as filed; Assets and LiabilitiesAndStockholdersEquity differ in a small number of filings because of filer tagging errors (typed digits, a total tagged with the Liabilities figure); EDGAR does not reject XBRL calculation inconsistencies. Only Q1/Q2 zips are used, so firms whose 10-K is filed in Jul-Dec (mostly Apr-Sep year-ends) are largely absent. Samples capped at 50000 samples (seed 12345). Counts: {\"filings_10k_fy\": 73956, \"conflicting_duplicate_values\": 0, \"duplicate_cik_period_dropped\": 20, \"unique_cik_period\": 73936, \"with_all_four_output_tags\": 53959, \"missing_Assets\": 1413, \"missing_Liabilities\": 14553, \"missing_StockholdersEquity\": 7271, \"missing_LiabilitiesAndStockholdersEquity\": 1600, \"identity1_filings_exact\": 53884, \"identity1_filings_rel_gt_1e-6\": 57, \"identity2_filings_exact\": 50575, \"identity2_filings_rel_gt_1e-6\": 3293, \"pairs_consecutive\": 42886, \"pairs_outside_years_dropped\": 214, \"next_filing_gap_months\": {\"11-13\": 42886, \"<11\": 30, \">13\": 1385}, \"n_before_cap\": 42672}",
+  "x_desc": "year-t consolidated balance-sheet values in USD (Assets, Liabilities, StockholdersEquity, LiabilitiesAndStockholdersEquity, MinorityInterest, StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest, TemporaryEquity, CommitmentsAndContingencies, AssetsCurrent, LiabilitiesCurrent, CashAndCashEquivalentsAtCarryingValue)",
+  "y_desc": "year-(t+1) Assets, Liabilities, StockholdersEquity, LiabilitiesAndStockholdersEquity (USD)",
+  "stats": {
+   "filings_10k_fy": 73956,
+   "conflicting_duplicate_values": 0,
+   "duplicate_cik_period_dropped": 20,
+   "unique_cik_period": 73936,
+   "with_all_four_output_tags": 53959,
+   "missing_Assets": 1413,
+   "missing_Liabilities": 14553,
+   "missing_StockholdersEquity": 7271,
+   "missing_LiabilitiesAndStockholdersEquity": 1600,
+   "identity1_filings_exact": 53884,
+   "identity1_filings_rel_gt_1e-6": 57,
+   "identity2_filings_exact": 50575,
+   "identity2_filings_rel_gt_1e-6": 3293,
+   "pairs_consecutive": 42886,
+   "pairs_outside_years_dropped": 214,
+   "next_filing_gap_months": {
+    "11-13": 42886,
+    "<11": 30,
+    ">13": 1385
+   },
+   "n_before_cap": 42672
+  }
+ },
+ "n_raw": 42672,
+ "n": 42672,
+ "p": 11,
+ "q": 4,
+ "m": 1,
+ "gate": {
+  "resid_max": 0.0005326007461684158,
+  "resid_mean": 1.5024817816935645e-08,
+  "resid_p99": 0.0,
+  "frac_above_1e-6": 0.00014060742407199101,
+  "labels_projected": false,
+  "status": "fail"
+ },
+ "rank": {
+  "rank": 1,
+  "m": 1,
+  "q": 4,
+  "ratio": 0.25,
+  "rows_kept": [
+   0
+  ],
+  "sv_min_kept": 1.4142135623730951,
+  "sv_max": 1.4142135623730951
+ },
+ "status": "failed_gate"
+}

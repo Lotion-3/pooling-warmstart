@@ -1,0 +1,149 @@
+{
+ "domain": "water_network",
+ "n_seeds": 3,
+ "per_seed": [
+  {
+   "seed": 0,
+   "c_w": {
+    "nrmse": 0.015107508269748769,
+    "pooled_nrmse": 0.009219632276637255,
+    "eq_viol_max": 2.670219041597276e-13,
+    "eq_viol_mean": 6.48005719675176e-14,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 100.0,
+     "max_abs": 0.027686221968461544,
+     "max_rel_std": 0.027686221968461544,
+     "pct_entries": 0.8403361344537815
+    }
+   },
+   "d_w": {
+    "nrmse": 0.012536503068956694,
+    "pooled_nrmse": 0.007810301776603912,
+    "eq_viol_max": 4.5367650344886523e-13,
+    "eq_viol_mean": 1.0960324572206209e-13,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 100.0,
+     "max_abs": 0.021997966468997723,
+     "max_rel_std": 0.021997966468997723,
+     "pct_entries": 0.8403361344537815
+    },
+    "train_seconds": 187.77564299991354,
+    "epochs": 141,
+    "best_val_objective": 0.0002271998133079448
+   }
+  },
+  {
+   "seed": 1,
+   "c_w": {
+    "nrmse": 0.009907819283565355,
+    "pooled_nrmse": 0.006127553505050985,
+    "eq_viol_max": 2.743071083226151e-13,
+    "eq_viol_mean": 6.255531362293765e-14,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 100.0,
+     "max_abs": 0.03032898088381375,
+     "max_rel_std": 0.03032898088381375,
+     "pct_entries": 0.8403361344537815
+    }
+   },
+   "d_w": {
+    "nrmse": 0.01211536987767085,
+    "pooled_nrmse": 0.007141438017506376,
+    "eq_viol_max": 3.1778827422111183e-13,
+    "eq_viol_mean": 9.669517677174227e-14,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.53333333333333,
+     "max_abs": 0.01684339459151149,
+     "max_rel_std": 0.01684339459151149,
+     "pct_entries": 0.8364145658263304
+    },
+    "train_seconds": 83.81217330007348,
+    "epochs": 154,
+    "best_val_objective": 0.00021259173744165853
+   }
+  },
+  {
+   "seed": 2,
+   "c_w": {
+    "nrmse": 0.012977932947599498,
+    "pooled_nrmse": 0.0076536626476648205,
+    "eq_viol_max": 2.7407704924378707e-13,
+    "eq_viol_mean": 6.503351313064341e-14,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.7,
+     "max_abs": 0.023076958741691286,
+     "max_rel_std": 0.023076958741691286,
+     "pct_entries": 0.8378151260504202
+    }
+   },
+   "d_w": {
+    "nrmse": 0.009996893428010661,
+    "pooled_nrmse": 0.006006292053456431,
+    "eq_viol_max": 3.153343107136129e-13,
+    "eq_viol_mean": 9.267720389130287e-14,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.86666666666667,
+     "max_abs": 0.011278545770363302,
+     "max_rel_std": 0.011278545770363302,
+     "pct_entries": 0.8392156862745099
+    },
+    "train_seconds": 178.32693789992481,
+    "epochs": 182,
+    "best_val_objective": 0.00014302804606296644
+   }
+  }
+ ],
+ "aggregate": {
+  "c_w": {
+   "nrmse_mean": 0.012664420166971209,
+   "nrmse_std": 0.0026139833752287403,
+   "pooled_nrmse_mean": 0.00766694947645102,
+   "pooled_nrmse_std": 0.0015460822058635851,
+   "eq_viol_max_mean": 2.718020205753766e-13,
+   "eq_viol_max_std": 4.1413000984359275e-15,
+   "eq_viol_pct_above_1e-5_mean": 0.0,
+   "eq_viol_pct_above_1e-5_std": 0.0,
+   "bound_pct_points_mean": 99.89999999999999
+  },
+  "d_w": {
+   "nrmse_mean": 0.01154958879154607,
+   "nrmse_std": 0.0013610604175270517,
+   "pooled_nrmse_mean": 0.006986010615855572,
+   "pooled_nrmse_std": 0.000911992888234663,
+   "eq_viol_max_mean": 3.6226636279452997e-13,
+   "eq_viol_max_std": 7.917301210045031e-14,
+   "eq_viol_pct_above_1e-5_mean": 0.0,
+   "eq_viol_pct_above_1e-5_std": 0.0,
+   "bound_pct_points_mean": 99.8
+  }
+ },
+ "bootstrap": {
+  "d_w_minus_a": {
+   "diff": -0.012759465901330756,
+   "ci_lo": -0.013020684597120675,
+   "ci_hi": -0.012500143100977816
+  },
+  "d_w_minus_d": {
+   "diff": -0.0033812533306589957,
+   "ci_lo": -0.0035048365986125717,
+   "ci_hi": -0.0032565626065356925
+  },
+  "c_w_minus_c": {
+   "diff": -0.004006245797266486,
+   "ci_lo": -0.004106841497671452,
+   "ci_hi": -0.0039110694879470635
+  },
+  "c_w_minus_a": {
+   "diff": -0.011644634525905617,
+   "ci_lo": -0.011834242529642143,
+   "ci_hi": -0.011449631336302198
+  }
+ },
+ "note": "c_w uses the main run's model (a) predictions saved as float32; d_w retrains with the same seeds, split, standardisation and early stopping as (d)"
+}

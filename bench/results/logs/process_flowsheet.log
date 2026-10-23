@@ -1,0 +1,8 @@
+05:09:00 [process_flowsheet] n=20000 p=13 q=15 m=9 rank=9 (0.600 q); gate pass max=3.253e-07 projected=False
+05:10:02 [process_flowsheet] tune lam=0.1: val nRMSE 0.02740 (59.5s)
+05:12:16 [process_flowsheet] tune lam=1.0: val nRMSE 0.02121 (134.1s)
+05:14:54 [process_flowsheet] tune lam=10.0: val nRMSE 0.02174 (158.6s)
+05:18:09 [process_flowsheet] seed 0: nRMSE a=0.02468 b=0.02242 c=0.02134 d=0.02446  pooled a=0.02332 c=0.02116 d=0.02435  viol% a=100.0 c=0.0 d=0.0 (195s)
+05:21:46 [process_flowsheet] seed 1: nRMSE a=0.02530 b=0.02420 c=0.02200 d=0.02465  pooled a=0.02373 c=0.02161 d=0.02436  viol% a=100.0 c=0.0 d=0.0 (217s)
+05:24:47 [process_flowsheet] seed 2: nRMSE a=0.02402 b=0.02500 c=0.02108 d=0.02593  pooled a=0.02258 c=0.02080 d=0.02598  viol% a=100.0 c=0.0 d=0.0 (181s)
+05:24:48 [process_flowsheet] done in 947s

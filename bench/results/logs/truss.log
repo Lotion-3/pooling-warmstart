@@ -1,0 +1,8 @@
+03:43:48 [truss] n=20000 p=64 q=38 m=26 rank=26 (0.684 q); gate pass max=1.610e-14 projected=False
+03:52:19 [truss] tune lam=0.1: val nRMSE 0.14542 (502.4s)
+04:00:33 [truss] tune lam=1.0: val nRMSE 0.14407 (494.1s)
+04:09:47 [truss] tune lam=10.0: val nRMSE 0.15519 (554.0s)
+04:18:24 [truss] seed 0: nRMSE a=0.14567 b=0.14371 c=0.14049 d=0.23965  pooled a=0.13204 c=0.12664 d=0.21720  viol% a=100.0 c=0.0 d=0.0 (517s)
+04:35:02 [truss] seed 1: nRMSE a=0.14233 b=0.14051 c=0.13670 d=0.24315  pooled a=0.13038 c=0.12392 d=0.21985  viol% a=100.0 c=0.0 d=0.0 (998s)
+04:49:59 [truss] seed 2: nRMSE a=0.13884 b=0.14388 c=0.13415 d=0.23929  pooled a=0.12619 c=0.12156 d=0.21600  viol% a=100.0 c=0.0 d=0.0 (897s)
+04:50:06 [truss] done in 3975s

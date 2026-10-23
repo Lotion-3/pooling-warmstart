@@ -1,0 +1,4 @@
+04:59:11 [bank_balance_sheets] seed 0: nRMSE c_w=0.22088 d_w=0.22189 (main a=0.22084 c=1.4385 d=0.81531) viol% d_w=0.0 epochs 41
+05:01:09 [bank_balance_sheets] seed 1: nRMSE c_w=0.22803 d_w=0.24925 (main a=0.22803 c=1.4428 d=0.73983) viol% d_w=0.0 epochs 28
+05:03:54 [bank_balance_sheets] seed 2: nRMSE c_w=0.27359 d_w=0.25854 (main a=0.27415 c=1.9097 d=0.58221) viol% d_w=0.0 epochs 45
+05:04:02 [bank_balance_sheets] ablation done

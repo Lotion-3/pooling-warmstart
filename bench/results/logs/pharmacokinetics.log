@@ -1,0 +1,8 @@
+03:43:49 [pharmacokinetics] n=20000 p=9 q=80 m=20 rank=20 (0.250 q); gate pass max=2.204e-15 projected=False
+03:48:52 [pharmacokinetics] tune lam=0.1: val nRMSE 0.02783 (295.8s)
+03:56:06 [pharmacokinetics] tune lam=1.0: val nRMSE 0.02495 (433.4s)
+04:01:39 [pharmacokinetics] tune lam=10.0: val nRMSE 0.02817 (333.4s)
+04:14:10 [pharmacokinetics] seed 0: nRMSE a=0.02621 b=0.02461 c=0.02523 d=0.02557  pooled a=0.02525 c=0.02413 d=0.02463  viol% a=100.0 c=0.0 d=0.0 (750s)
+04:32:17 [pharmacokinetics] seed 1: nRMSE a=0.02379 b=0.02732 c=0.02325 d=0.02571  pooled a=0.02329 c=0.02239 d=0.02501  viol% a=100.0 c=0.0 d=0.0 (1088s)
+04:48:31 [pharmacokinetics] seed 2: nRMSE a=0.02558 b=0.02521 c=0.02517 d=0.02615  pooled a=0.02497 c=0.02415 d=0.02515  viol% a=100.0 c=0.0 d=0.0 (973s)
+04:48:48 [pharmacokinetics] done in 3893s

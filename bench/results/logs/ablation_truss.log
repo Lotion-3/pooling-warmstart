@@ -1,0 +1,4 @@
+04:54:34 [truss] seed 0: nRMSE c_w=0.14039 d_w=0.22932 (main a=0.14567 c=0.14049 d=0.23965) viol% d_w=0.0 epochs 78
+04:56:31 [truss] seed 1: nRMSE c_w=0.13665 d_w=0.23840 (main a=0.14233 c=0.1367 d=0.24315) viol% d_w=0.0 epochs 66
+04:58:13 [truss] seed 2: nRMSE c_w=0.13428 d_w=0.23503 (main a=0.13884 c=0.13415 d=0.23929) viol% d_w=0.0 epochs 59
+04:58:22 [truss] ablation done

@@ -1,0 +1,4 @@
+04:56:47 [heat_exchanger_network] seed 0: nRMSE c_w=0.01509 d_w=0.01380 (main a=0.01741 c=0.01845 d=0.015717) viol% d_w=0.0 epochs 161
+04:59:23 [heat_exchanger_network] seed 1: nRMSE c_w=0.01419 d_w=0.01676 (main a=0.01617 c=0.016955 d=0.022046) viol% d_w=0.0 epochs 99
+05:02:35 [heat_exchanger_network] seed 2: nRMSE c_w=0.01751 d_w=0.01537 (main a=0.02018 c=0.020921 d=0.017467) viol% d_w=0.0 epochs 131
+05:02:37 [heat_exchanger_network] ablation done

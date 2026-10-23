@@ -358,6 +358,7 @@ def run_domain(dom: Domain, seeds=None, max_epochs=300, patience=20, results_dir
     Yte = dom.Y[te]
     sd = Yte.std(0)
     valid = sd > 1e-12 * np.maximum(1.0, np.abs(Yte).mean(0))
+    valid &= dom.Y[tr].std(0) >= 1e-12          # outputs constant in training are not scored either
     out["n_outputs_scored"] = int(valid.sum())
     out["label_bounds_test"] = bound_violation(dom, Yte, sd)
     T = Trainer(dom, tr, va, Ar, Br, br, scale, max_epochs=max_epochs, patience=patience)

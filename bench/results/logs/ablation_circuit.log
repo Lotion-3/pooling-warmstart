@@ -1,0 +1,4 @@
+04:57:12 [circuit] seed 0: nRMSE c_w=0.28617 d_w=0.39696 (main a=0.29270 c=0.28612 d=0.40784) viol% d_w=0.0 epochs 113
+05:00:17 [circuit] seed 1: nRMSE c_w=0.28299 d_w=0.40129 (main a=0.28895 c=0.28276 d=0.41059) viol% d_w=0.0 epochs 116
+05:02:56 [circuit] seed 2: nRMSE c_w=0.29726 d_w=0.41163 (main a=0.30565 c=0.29753 d=0.41429) viol% d_w=0.0 epochs 109
+05:03:01 [circuit] ablation done
