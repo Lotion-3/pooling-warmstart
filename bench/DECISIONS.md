@@ -245,3 +245,19 @@ Every judgement call made while building the suite, in the order it was made.
   rounding level, but its pass is marginal and depends on the sample. It is flagged in summary.md and findings.md.
 - **Split.** Group split by state: test = CO, NJ, TX; val = ME, NY, WI.
 - **Bounds.** ≥ 0 on consumption, PV ≤ 0.
+
+### company_financials (tier 2; parallel worker, reviewed here): FAILED THE GATE
+- **Data.** SEC EDGAR Financial Statement Data Sets, the Q1 and Q2 zips of 2012–2025 (28 zips, 2.68 GB; User-Agent
+  per SEC policy). Only the Q1+Q2 zips were used to bound the download, so firms filing their 10-K in July–December
+  are largely absent.
+- **Filters.** 10-K, fp FY, no amendments. Consolidated us-gaap USD values at the filing's own period (qtrs 0, no
+  coreg or segments). Samples must tag Assets, Liabilities, StockholdersEquity and LiabilitiesAndStockholdersEquity
+  in both years (a presence filter, not a residual filter): 53,959 of 73,936 filings.
+- **Samples.** Consecutive filings 11–13 months apart, t = 2011–2023 → n = 42,672.
+- **Variables.** Y = year-t+1 Assets, Liabilities, StockholdersEquity, LSE. X = 11 year-t balance-sheet items.
+- **Identity.** Assets − LSE = 0 only. The second identity (LSE = Liabilities + equity incl. NCI + temporary equity +
+  commitments) is off by more than 1e-6 in 6.1% of filings, so it was measured but not imposed.
+- **Gate result.** Max 5.33e-4. 42,631 of 42,672 samples are exactly 0, but 6 are above 1e-6 and 1 is above 1e-4.
+  The bad values are as filed: transposed digits, the Liabilities figure tagged as the total, sign errors.
+- **Outcome.** Per the rules, the labels were not altered and the samples were not dropped on residual. Failed; no
+  results are reported.
