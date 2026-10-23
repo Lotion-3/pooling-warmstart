@@ -272,3 +272,13 @@ Every judgement call made while building the suite, in the order it was made.
 - **Equality.** Hot-side and cold-side energy balance of each exchanger (8 rows, rank 8 of 12 = 0.667).
 - **Bounds.** Only E1's duty is bounded ≥ 0. Downstream exchangers can run in reverse (negative duty) when the
   preheated cold stream is hotter than the hot stream; this is physical, and the balances still hold.
+
+## Harness change during the run (04:00): floor on the row scale
+
+- **Problem.** metabolic has 9 constraint rows whose terms are identically zero (metabolites in pathways pFBA never
+  uses) plus 1 near-zero row, and water_network has 1 (junction 601, behind a closed pipe). With scale + 1e-12 in the
+  denominator, any tiny prediction error in those rows became a relative residual of ~1e12. This dominated the soft
+  penalty (b) (water_network λ-tuning reached val nRMSE 1.001, no better than the mean) and the violation metrics.
+- **Fix.** scale_i := max(scale_i, 1e-3 × median_i scale_i), recorded as `rows_scale_floored` in each gate. The other
+  10 domains have no row below the floor, so their numbers are unchanged. metabolic and water_network were stopped and
+  restarted at 04:00. Their gates still pass: metabolic 1.69e-13 (was 3.24e-13), water_network 2.73e-16.

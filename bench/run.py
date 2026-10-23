@@ -35,6 +35,7 @@ VIOL_TOL = 1e-5
 N_CAP = 50_000
 SPLIT_SEED = 12345
 LAMBDAS = (0.1, 1.0, 10.0)
+SCALE_FLOOR = 1e-3
 
 
 # ----------------------------------------------------------------------------- constraints
@@ -79,10 +80,15 @@ def rel_violation(A, B, b, scale, X, Y):
 def gate(dom: Domain) -> dict:
     """Check the identity on all data.  Projects the labels if 1e-6 < residual <= 1e-4."""
     scale = term_scale(dom.A, dom.B, dom.b, dom.X, dom.Y)
+    # rows whose terms are (almost) always zero, e.g. a metabolite in an unused pathway, would turn any tiny
+    # prediction error into an enormous relative residual: floor the scale at 1e-3 x the median row scale
+    floor = SCALE_FLOOR * np.median(scale)
+    n_floored = int((scale < floor).sum())
+    scale = np.maximum(scale, floor)
     v = rel_violation(dom.A, dom.B, dom.b, scale, dom.X, dom.Y)
     info = {"scale": scale.tolist(), "resid_max": float(v.max()), "resid_mean": float(v.mean()),
             "resid_p99": float(np.quantile(v, 0.99)), "frac_above_1e-6": float((v > GATE_PASS).mean()),
-            "labels_projected": False}
+            "labels_projected": False, "rows_scale_floored": n_floored}
     if v.max() <= GATE_PASS:
         info["status"] = "pass"
     elif v.max() <= GATE_PROJECT:
