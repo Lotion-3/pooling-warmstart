@@ -183,3 +183,21 @@ Every judgement call made while building the suite, in the order it was made.
 - **Zero outputs.** Pipe 330 (closed) and pipe 333 (dead end behind it) are always 0. They are kept and excluded from
   nRMSE as constant.
 - **Bounds.** Pumps ≥ 0; pipe 330 fixed at 0.
+
+### food_balance (tier 2; parallel worker, reviewed here): FAILED THE GATE
+- **Data.** FAOSTAT Food Balances (2010–) bulk CSV. Individual countries only (area < 5000, aggregate "China" 351
+  dropped) and individual items only (2511–2899).
+- **Elements.** 13 quantity elements in 1000 t. Missing elements are read as 0 (FAO omits nil elements; the balances
+  close only under this reading).
+- **Sign convention.** Stock variation enters supply with a minus sign (checked: with −SV all records close within
+  2 kt; with +SV only 63% close).
+- **Identities.** Production + Import − Export − StockVar − DomesticSupply = 0, and DomesticSupply − Σ utilisation
+  (incl. Residuals) = 0.
+- **Gate result.** Max relative residual 3.27e-2 on the harness's 50k subsample; 29.7% of samples are above 1e-4.
+  Cause: values are published as whole numbers of 1000 t, so the identities close only to ±1–2 kt (≈ 6e-4 of the
+  mean term magnitude). One record (Nepal, oranges, 2014) is genuinely inconsistent: Processing 54 kt is not counted
+  in Domestic supply.
+- **Outcome.** Per the rules, no labels were changed and no samples were dropped on residual. The domain is reported
+  as failed and none of its model results are reported.
+- **Not tried.** FAOSTAT's Supply Utilization Accounts (tonnes instead of 1000 t) could pass, but would need a
+  separate loader. Noted as future work.
