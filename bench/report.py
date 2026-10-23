@@ -22,6 +22,13 @@ NAMES = {"a": "(a) MLP", "b": "(b) soft penalty", "c": "(c) post-hoc projection"
 COLORS = {"a": "#2a78d6", "b": "#eb6834", "c": "#1baf7a", "d": "#eda100"}
 NOTES = {"process_flowsheet": " (closest to the original paper)",
          "building_end_use": " (caveat: state set chosen after a failed draw; see DECISIONS.md)"}
+SHORT = {"metabolic": "COBRApy e_coli_core, pFBA", "water_network": "WNTR, EPANET Net3",
+         "dc_power_flow": "pandapower IEEE 118-bus, DC flow", "combustion": "Cantera GRI-Mech 3.0 reactor",
+         "truss": "numpy truss FEM", "circuit": "numpy resistor network", "process_flowsheet": "IDAES flowsheet",
+         "pharmacokinetics": "scipy 3-compartment PK", "epidemic": "scipy SEIRD",
+         "building_end_use": "NREL ResStock 2025.1 (OEDI)", "bank_balance_sheets": "FDIC BankFind API",
+         "food_balance": "FAOSTAT FBS", "company_financials": "SEC EDGAR FS data sets",
+         "county_population": "Census county estimates", "heat_exchanger_network": "numpy HEN, eps-NTU"}
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 
 
@@ -36,6 +43,30 @@ def load_all():
         out[m["domain"]] = m
     blocked = json.loads((RESULTS / "blocked.json").read_text()) if (RESULTS / "blocked.json").exists() else {}
     return out, blocked
+
+
+def bound_pct_from_preds(name, thr):
+    """% of test points (mean over seeds) with a bound excess above thr x test std, from saved predictions."""
+    f = RESULTS / name / "test_predictions.npz"
+    if not f.exists():
+        return None
+    from bench.run import load_domain
+    dom = load_domain(name)
+    z = np.load(f)
+    Y = z["Y"]
+    sd = Y.std(0)
+    sd = np.where(sd > 0, sd, 1.0)
+    lo = dom.y_lo if dom.y_lo is not None else np.full(Y.shape[1], -np.inf)
+    hi = dom.y_hi if dom.y_hi is not None else np.full(Y.shape[1], np.inf)
+    v = np.maximum(np.maximum(lo - Y, Y - hi), 0.0) / sd
+    out = {"labels": float(100 * (v.max(1) > thr).mean())}
+    for mdl in MODELS:
+        pct = []
+        for P in z[mdl].astype(np.float64):
+            v = np.maximum(np.maximum(lo - P, P - hi), 0.0) / sd
+            pct.append(100 * (v.max(1) > thr).mean())
+        out[mdl] = float(np.mean(pct))
+    return out
 
 
 def style(ax):
@@ -143,7 +174,7 @@ def main():
         vi = " / ".join(g(ag[x]["eq_viol_pct_above_1e-5_mean"], 4) for x in MODELS)
         bd = (" / ".join(g(ag[x]["bound_pct_points_mean"], 4) for x in MODELS)
               if "bound_pct_points_mean" in ag["a"] else "—")
-        src = m["meta"].get("source", "")
+        src = SHORT.get(k, m["meta"].get("source", "")[:40])
         name = k + NOTES.get(k, "")
         L.append(f"| {name} | {src} | {m['n']} | {m['rank']['rank']}/{m['q']} = {m['rank']['ratio']:.3f} | {gate} | "
                  + " | ".join(nr) + f" | {vi} | {bd} | {len(m['per_seed'])} |")
@@ -168,15 +199,21 @@ def main():
         ag = ok[k]["aggregate"]
         L.append(f"| {k} | " + " | ".join(f"{ag[x]['pooled_nrmse_mean']:.4g} ± {ag[x]['pooled_nrmse_std']:.2g}"
                                           for x in MODELS) + " |")
-    L += ["", "## Bound violations (max over seeds)", "",
-          "| domain | labels% | max excess / std: a | b | c | d |", "|---|---|---|---|---|---|"]
+    L += ["", "## Bound violations", "",
+          "% of test points with any output outside its bounds by more than 1e-5 x std (as in the main table) and "
+          "by more than 1e-2 x std (computed here from the saved test predictions), and the largest excess / std "
+          "(max over seeds). Bounds are never enforced by any model.", "",
+          "| domain | labels % (> 1e-5 / > 1e-2 std) | % > 1e-2 std: a / b / c / d | max excess / std: a / b / c / d |",
+          "|---|---|---|---|"]
     for k in sorted(ok):
         ag = ok[k]["aggregate"]
         if "bound_max_rel_std" not in ag["a"]:
             continue
         lb = ok[k]["label_bounds_test"]
-        L.append(f"| {k} | {g(lb['pct_points'] if lb else None)} | "
-                 + " | ".join(g(ag[x]["bound_max_rel_std"], 3) for x in MODELS) + " |")
+        coarse = bound_pct_from_preds(k, 1e-2)
+        L.append(f"| {k} | {g(lb['pct_points'] if lb else None)} / {g(coarse['labels']) if coarse else 'n/a'} | "
+                 + (" / ".join(g(coarse[x], 4) for x in MODELS) if coarse else "n/a") + " | "
+                 + " / ".join(g(ag[x]["bound_max_rel_std"], 3) for x in MODELS) + " |")
     L += ["", "## Max equality violation on the test set (max over seeds, relative)", "",
           "| domain | a | b | c | d |", "|---|---|---|---|---|"]
     for k in sorted(ok):
@@ -187,6 +224,26 @@ def main():
     for k in sorted(ok):
         ag = ok[k]["aggregate"]
         L.append(f"| {k} | " + " | ".join(f"{ag[x]['train_seconds_mean']:.1f}" for x in MODELS) + " |")
+    abl = {k: json.loads((RESULTS / k / "ablation_weighted.json").read_text())
+           for k in ok if (RESULTS / k / "ablation_weighted.json").exists()}
+    if abl:
+        L += ["", "## Ablation beyond the main protocol: variance-weighted projection", "",
+              "c_w / d_w use the same KKT projection, but find the closest feasible point in STANDARDISED units "
+              "(weights = training variance of each output) instead of original units. Constraint satisfaction is "
+              "identical. Same seeds, split and backbone as (c) / (d). See DECISIONS.md.", "",
+              "| domain | nRMSE (a) | (c) | c_w | (d) | d_w | d_w − a [CI] | d_w − d [CI] | pooled (a) / c_w / d_w "
+              "| viol% d_w |", "|---|---|---|---|---|---|---|---|---|---|"]
+        fmt = lambda x: f"{x['diff']:+.4f} [{x['ci_lo']:+.4f}, {x['ci_hi']:+.4f}]"
+        for k in sorted(abl):
+            ag, aw = ok[k]["aggregate"], abl[k]["aggregate"]
+            L.append(f"| {k} | {ag['a']['nrmse_mean']:.4g} | {ag['c']['nrmse_mean']:.4g} | {aw['c_w']['nrmse_mean']:.4g} "
+                     f"| {ag['d']['nrmse_mean']:.4g} | {aw['d_w']['nrmse_mean']:.4g} ± {aw['d_w']['nrmse_std']:.2g} | "
+                     f"{fmt(abl[k]['bootstrap']['d_w_minus_a'])} | {fmt(abl[k]['bootstrap']['d_w_minus_d'])} | "
+                     f"{ag['a']['pooled_nrmse_mean']:.4g} / {aw['c_w']['pooled_nrmse_mean']:.4g} / "
+                     f"{aw['d_w']['pooled_nrmse_mean']:.4g} | {g(aw['d_w']['eq_viol_pct_above_1e-5_mean'])} |")
+        missing = sorted(set(ok) - set(abl))
+        if missing:
+            L.append(f"\nAblation not run (time): {', '.join(missing)}.")
     L += ["", "## Domains dropped", ""]
     if not (failed or degen or blocked):
         L.append("None.")
