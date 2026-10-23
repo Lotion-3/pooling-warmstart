@@ -242,7 +242,10 @@ def bound_violation(dom, P, sd):
 
 def eval_model(dom, te, P, scale, sd, valid):
     v = rel_violation(dom.A, dom.B, dom.b, scale, dom.X[te], P)
-    return {"nrmse": nrmse_parts(dom.Y[te], P, sd, valid),
+    Yte = dom.Y[te]
+    return {"nrmse": nrmse_parts(Yte, P, sd, valid),
+            # pooled over outputs in ORIGINAL units: ||P - Y||_F / ||Y - mean(Y)||_F (scale-weighted)
+            "pooled_nrmse": float(np.sqrt(((P - Yte) ** 2).sum() / ((Yte - Yte.mean(0)) ** 2).sum())),
             "eq_viol_max": float(v.max()), "eq_viol_mean": float(v.mean()),
             "eq_viol_pct_above_1e-5": float(100 * (v > VIOL_TOL).mean()),
             "bounds": bound_violation(dom, P, sd)}
@@ -388,7 +391,8 @@ def run_domain(dom: Domain, seeds=None, max_epochs=300, patience=20, results_dir
         rec["seed_seconds"] = time.perf_counter() - t_seed
         per_seed.append(rec)
         log(f"[{dom.name}] seed {s}: nRMSE a={rec['a']['nrmse']:.5f} b={rec['b']['nrmse']:.5f} "
-            f"c={rec['c']['nrmse']:.5f} d={rec['d']['nrmse']:.5f}  viol% a={rec['a']['eq_viol_pct_above_1e-5']:.1f}"
+            f"c={rec['c']['nrmse']:.5f} d={rec['d']['nrmse']:.5f}  pooled a={rec['a']['pooled_nrmse']:.5f} "
+            f"c={rec['c']['pooled_nrmse']:.5f} d={rec['d']['pooled_nrmse']:.5f}  viol% a={rec['a']['eq_viol_pct_above_1e-5']:.1f}"
             f" c={rec['c']['eq_viol_pct_above_1e-5']:.1f} d={rec['d']['eq_viol_pct_above_1e-5']:.1f} "
             f"({rec['seed_seconds']:.0f}s)")
         if seed_list is None:  # 5 seeds if seed 0 (a + b + d, incl. lambda tuning) took < 5 min, else 3
@@ -403,7 +407,7 @@ def run_domain(dom: Domain, seeds=None, max_epochs=300, patience=20, results_dir
     agg = {}
     for k in "abcd":
         vals = {key: np.array([r[k][key] for r in per_seed]) for key in
-                ("nrmse", "eq_viol_max", "eq_viol_mean", "eq_viol_pct_above_1e-5", "train_seconds")}
+                ("nrmse", "pooled_nrmse", "eq_viol_max", "eq_viol_mean", "eq_viol_pct_above_1e-5", "train_seconds")}
         agg[k] = {f"{key}_mean": float(v.mean()) for key, v in vals.items()}
         agg[k].update({f"{key}_std": float(v.std(ddof=1)) if len(v) > 1 else 0.0 for key, v in vals.items()})
         agg[k]["eq_viol_max_over_seeds"] = float(vals["eq_viol_max"].max())
@@ -425,6 +429,7 @@ def run_domain(dom: Domain, seeds=None, max_epochs=300, patience=20, results_dir
     for k in "abcd":
         row[f"nrmse_{k}_mean"] = agg[k]["nrmse_mean"]
         row[f"nrmse_{k}_std"] = agg[k]["nrmse_std"]
+        row[f"pooled_nrmse_{k}_mean"] = agg[k]["pooled_nrmse_mean"]
         row[f"viol_pct_{k}"] = agg[k]["eq_viol_pct_above_1e-5_mean"]
         row[f"viol_max_{k}"] = agg[k]["eq_viol_max_over_seeds"]
         row[f"bound_pct_{k}"] = agg[k].get("bound_pct_points_mean", np.nan)
@@ -439,6 +444,8 @@ def run_domain(dom: Domain, seeds=None, max_epochs=300, patience=20, results_dir
     if write:
         _write_json(results_dir / dom.name / "metrics.json", out)
         append_summary(row, results_dir)
+        np.savez_compressed(results_dir / dom.name / "test_predictions.npz", test_idx=te, Y=Yte,
+                            **{k: np.stack(v).astype(np.float32) for k, v in preds.items()})
     log(f"[{dom.name}] done in {out['total_seconds']:.0f}s")
     return out
 
