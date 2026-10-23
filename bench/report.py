@@ -20,6 +20,8 @@ from bench.domain import RESULTS  # noqa: E402
 MODELS = "abcd"
 NAMES = {"a": "(a) MLP", "b": "(b) soft penalty", "c": "(c) post-hoc projection", "d": "(d) KKT-hPINN"}
 COLORS = {"a": "#2a78d6", "b": "#eb6834", "c": "#1baf7a", "d": "#eda100"}
+NOTES = {"process_flowsheet": " (closest to the original paper)",
+         "building_end_use": " (caveat: state set chosen after a failed draw; see DECISIONS.md)"}
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 
 
@@ -142,7 +144,7 @@ def main():
         bd = (" / ".join(g(ag[x]["bound_pct_points_mean"], 4) for x in MODELS)
               if "bound_pct_points_mean" in ag["a"] else "—")
         src = m["meta"].get("source", "")
-        name = k + (" (closest to the original paper)" if k == "process_flowsheet" else "")
+        name = k + NOTES.get(k, "")
         L.append(f"| {name} | {src} | {m['n']} | {m['rank']['rank']}/{m['q']} = {m['rank']['ratio']:.3f} | {gate} | "
                  + " | ".join(nr) + f" | {vi} | {bd} | {len(m['per_seed'])} |")
     L += ["", "## Paired differences (bootstrap 95% CI over test points, mean over seeds)", "",
@@ -157,6 +159,15 @@ def main():
         L.append(f"| {k} | {fmt(b['d_minus_a'])} | {m['paired']['d_minus_a']['n_seeds_negative']}/{S} | "
                  f"{fmt(b['d_minus_c'])} | {m['paired']['d_minus_c']['n_seeds_negative']}/{S} | {fmt(b['c_minus_a'])} | "
                  f"{m['lambda']['chosen']} | {m['split']['desc']} |")
+    L += ["", "## Pooled nRMSE in original units (||P - Y||_F / ||Y - mean||_F; mean ± std over seeds)", "",
+          "nRMSE above weights every output equally after dividing by its std. The pooled version weights outputs "
+          "by their size in original units, which is the metric the Euclidean projection is guaranteed not to "
+          "worsen for (c).", "",
+          "| domain | (a) | (b) | (c) | (d) |", "|---|---|---|---|---|"]
+    for k in sorted(ok):
+        ag = ok[k]["aggregate"]
+        L.append(f"| {k} | " + " | ".join(f"{ag[x]['pooled_nrmse_mean']:.4g} ± {ag[x]['pooled_nrmse_std']:.2g}"
+                                          for x in MODELS) + " |")
     L += ["", "## Bound violations (max over seeds)", "",
           "| domain | labels% | max excess / std: a | b | c | d |", "|---|---|---|---|---|---|"]
     for k in sorted(ok):
