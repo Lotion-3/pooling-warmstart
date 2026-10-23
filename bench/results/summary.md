@@ -1,6 +1,58 @@
 # Benchmark results: hard linear equality constraints across domains
 
-Domains attempted: 16. Passed the gate and trained: 14. Failed the gate: 2. Degenerate (rank(A) >= 0.8 q): 0. Blocked before the gate: 0.
+Original plan: 18 domains. Attempted: 16. Passed the gate and trained: 14. Failed the gate: 2. Degenerate (rank(A) >= 0.8 q): 0. Skipped (not attempted): 2.
+
+## Main results under both scoring rules
+
+nRMSE (lower is better), mean over seeds. Verdicts: 95% bootstrap CI of the difference from the standard MLP excludes 0 ('better' / 'worse'), else 'no clear difference'. 'Original rule' = outputs constant on the test set are not scored (the rule in place when the run started); 'new rule' = outputs constant on the training set are not scored either (adopted at 05:28, after the first fermentation results had been seen; see DECISIONS.md). Original-rule numbers are recomputed from the saved test predictions without retraining.
+
+| test case | field | standard MLP (new / original rule) | KKT-hPINN as specified (new / original) | KKT-hPINN scaled (new / original) | as specified vs MLP (new / original) | scaled vs MLP (new / original) |
+|---|---|---|---|---|---|---|
+| [process_flowsheet](../README.md#process_flowsheet) | chemical process (IDAES) | 0.02467 / 0.02467 | 0.02501 / 0.02501 | 0.02612 / 0.02612 | no clear difference / no clear difference | worse / worse |
+| [heat_exchanger_network](../README.md#heat_exchanger_network) | heat integration | 0.01792 / 0.01792 | 0.01841 / 0.01841 | 0.01531 / 0.01531 | worse / worse | better / better |
+| [combustion](../README.md#combustion) | combustion chemistry | 0.5678 / 0.5678 | 738.6 / 738.6 | 0.5814 / 0.5814 | worse / worse | no clear difference / no clear difference |
+| [fermentation](../README.md#fermentation) ‡ | bioprocess | 0.08327 / 1599 | 0.1569 / 910.9 | 0.08281 / not measured | worse / better | no clear difference / not measured |
+| [metabolic](../README.md#metabolic) | systems biology | 0.09272 / 0.09272 | 1.003 / 1.003 | 0.08945 / 0.08945 | worse / worse | better / better |
+| [pharmacokinetics](../README.md#pharmacokinetics) | pharmacology | 0.02519 / 0.02519 | 0.02581 / 0.02581 | 0.02408 / 0.02408 | worse / worse | better / better |
+| [epidemic](../README.md#epidemic) | epidemiology | 0.04426 / 0.04426 | 0.1923 / 0.1923 | 0.04371 / 0.04371 | worse / worse | no clear difference / no clear difference |
+| [dc_power_flow](../README.md#dc_power_flow) | power systems | 0.02549 / 0.02549 | 0.01198 / 0.01198 | 0.01157 / 0.01157 | better / better | better / better |
+| [water_network](../README.md#water_network) | water distribution | 0.02431 / 0.02431 | 0.01493 / 0.01493 | 0.01155 / 0.01155 | better / better | better / better |
+| [circuit](../README.md#circuit) | electrical circuits | 0.2958 / 0.2958 | 0.4109 / 0.4109 | 0.4033 / 0.4033 | worse / worse | worse / worse |
+| [truss](../README.md#truss) | structural mechanics | 0.1423 / 0.1423 | 0.2407 / 0.2407 | 0.2343 / 0.2343 | worse / worse | worse / worse |
+| [building_end_use](../README.md#building_end_use) | building energy (real data) | 0.5468 / 0.5468 | 1.732 / 1.732 | 0.5693 / 0.5693 | worse / worse | worse / worse |
+| [bank_balance_sheets](../README.md#bank_balance_sheets) | banking (real data) | 0.241 / 0.241 | 0.7124 / 0.7124 | 0.2432 / 0.2432 | worse / worse | no clear difference / no clear difference |
+| [county_population](../README.md#county_population) | demography (real data) | 0.4807 / 0.4807 | 7.503 / 7.503 | 0.4237 / 0.4237 | worse / worse | better / better |
+
+‡ the two rules score a different set of outputs in this domain (fermentation); in every other domain the scored outputs, and therefore all numbers, are identical under both rules.
+
+- As specified vs MLP, new rule: 2 better, 1 no clear difference, 11 worse. Original rule: 3 better, 1 no clear difference, 10 worse.
+- Scaled vs MLP, new rule: 6 better, 4 no clear difference, 4 worse. Original rule: 6 better, 3 no clear difference, 4 worse, 1 not measured.
+- End-to-end (d) vs post-hoc projection (c), new rule: 8 better, 0 no clear difference, 6 worse. Original rule: 8 better, 0 no clear difference, 6 worse.
+
+## Status of every domain in the original plan
+
+| domain | tier | status |
+|---|---|---|
+| metabolic | 1 | passed (gate residual 1.69e-13) |
+| water_network | 1 | passed (gate residual 2.73e-16) |
+| dc_power_flow | 1 | passed (gate residual 1.1e-13) |
+| combustion | 1 | passed (gate residual 1.3e-14) |
+| truss | 1 | passed (gate residual 1.61e-14) |
+| circuit | 1 | passed (gate residual 2.39e-14) |
+| process_flowsheet | 1 | passed (gate residual 3.25e-07) |
+| pharmacokinetics | 1 | passed (gate residual 2.2e-15) |
+| epidemic | 1 | passed (gate residual 2.71e-15) |
+| building_end_use | 2 | passed (gate residual 9.73e-05, labels projected) |
+| bank_balance_sheets | 2 | passed (gate residual 1.4e-07) |
+| food_balance | 2 | failed gate (max relative residual 0.0327) |
+| company_financials | 2 | failed gate (max relative residual 0.000533) |
+| county_population | 2 | passed (gate residual 0) |
+| fermentation | 3 | passed (gate residual 2.52e-15) |
+| heat_exchanger_network | 3 | passed (gate residual 1.9e-16) |
+| bea_input_output | 3 | skipped: optional tier 3 ('only if time remains'); not started before the write-up was cut short on request |
+| lodes_commuting | 3 | skipped: optional tier 3 ('only if time remains'); not started before the write-up was cut short on request |
+
+## Detailed tables (new rule)
 
 nRMSE = per-output test RMSE / test std, averaged over outputs; mean ± std over seeds. Violation = % of test points whose max relative equality residual exceeds 1e-5. Bounds = % of test points violating an output bound by more than 1e-5 x output std (— where the domain has no bounds). All numbers are generated by `bench/report.py` from `bench/results/<domain>/metrics.json`.
 

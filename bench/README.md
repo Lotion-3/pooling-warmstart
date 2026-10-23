@@ -6,26 +6,38 @@ that do to its accuracy compared with a standard neural network?
 
 The method tested is the KKT projection layer (KKT-hPINN) of **Chen, Constante-Flores & Li (2024), "Physics-informed
 neural networks with hard linear equality constraints"**. The paper demonstrated it on Aspen surrogates of a CSTR,
-an extractive distillation subsystem and a chemical plant. This suite applies it to 14 other domains.
+an extractive distillation subsystem and a chemical plant. This suite applies it to other domains: of 18 planned,
+16 were attempted, and 14 passed the data gate and were trained.
 
 ## Results at a glance
 
-| test case | field | conserved quantity | standard MLP | KKT-hPINN, as specified | KKT-hPINN, scaled projection | vs standard MLP (as specified / scaled) |
+Each cell gives the result under the **new** scoring rule first, then under the **original** rule. The two differ
+only for fermentation (‡); see [Scoring rule](#scoring-rule-changed-after-results-were-seen) below.
+
+<!-- results-table:start -->
+| test case | field | standard MLP (new / original rule) | KKT-hPINN as specified (new / original) | KKT-hPINN scaled (new / original) | as specified vs MLP (new / original) | scaled vs MLP (new / original) |
 |---|---|---|---|---|---|---|
-| [process_flowsheet](#process_flowsheet) | chemical process (IDAES) | component mass per unit | 0.02467 | 0.02501 | 0.02612 | no clear difference / worse |
-| [heat_exchanger_network](#heat_exchanger_network) | heat integration | energy per exchanger side | 0.01792 | 0.01841 | 0.01531 | worse / **better** |
-| [combustion](#combustion) | combustion chemistry | element mass | 0.5678 | 738.6 | 0.5814 | worse / no clear difference |
-| [fermentation](#fermentation) | bioprocess | carbon | 0.08327 | 0.1569 | 0.08281 | worse / no clear difference |
-| [metabolic](#metabolic) | systems biology | metabolite mass (S·v = 0) | 0.09272 | 1.003 | 0.08945 | worse / **better** |
-| [pharmacokinetics](#pharmacokinetics) | pharmacology | drug mass vs dose given | 0.02519 | 0.02581 | 0.02408 | worse / **better** |
-| [epidemic](#epidemic) | epidemiology | population | 0.04426 | 0.1923 | 0.04371 | worse / no clear difference |
-| [dc_power_flow](#dc_power_flow) | power systems | power at every bus | 0.02549 | 0.01198 | 0.01157 | **better** / **better** |
-| [water_network](#water_network) | water distribution | flow at every junction | 0.02431 | 0.01493 | 0.01155 | **better** / **better** |
-| [circuit](#circuit) | electrical circuits | current (Kirchhoff) | 0.2958 | 0.4109 | 0.4033 | worse / worse |
-| [truss](#truss) | structural mechanics | force equilibrium | 0.1423 | 0.2407 | 0.2343 | worse / worse |
-| [building_end_use](#building_end_use) | building energy (real data) | end uses sum to totals | 0.5468 | 1.732 | 0.5693 | worse / worse |
-| [bank_balance_sheets](#bank_balance_sheets) | banking (real data) | assets = liabilities + equity | 0.241 | 0.7124 | 0.2432 | worse / no clear difference |
-| [county_population](#county_population) | demography (real data) | components of population change | 0.4807 | 7.503 | 0.4237 | worse / **better** |
+| [process_flowsheet](#process_flowsheet) | chemical process (IDAES) | 0.02467 / 0.02467 | 0.02501 / 0.02501 | 0.02612 / 0.02612 | no clear difference / no clear difference | worse / worse |
+| [heat_exchanger_network](#heat_exchanger_network) | heat integration | 0.01792 / 0.01792 | 0.01841 / 0.01841 | 0.01531 / 0.01531 | worse / worse | better / better |
+| [combustion](#combustion) | combustion chemistry | 0.5678 / 0.5678 | 738.6 / 738.6 | 0.5814 / 0.5814 | worse / worse | no clear difference / no clear difference |
+| [fermentation](#fermentation) ‡ | bioprocess | 0.08327 / 1599 | 0.1569 / 910.9 | 0.08281 / not measured | worse / better | no clear difference / not measured |
+| [metabolic](#metabolic) | systems biology | 0.09272 / 0.09272 | 1.003 / 1.003 | 0.08945 / 0.08945 | worse / worse | better / better |
+| [pharmacokinetics](#pharmacokinetics) | pharmacology | 0.02519 / 0.02519 | 0.02581 / 0.02581 | 0.02408 / 0.02408 | worse / worse | better / better |
+| [epidemic](#epidemic) | epidemiology | 0.04426 / 0.04426 | 0.1923 / 0.1923 | 0.04371 / 0.04371 | worse / worse | no clear difference / no clear difference |
+| [dc_power_flow](#dc_power_flow) | power systems | 0.02549 / 0.02549 | 0.01198 / 0.01198 | 0.01157 / 0.01157 | better / better | better / better |
+| [water_network](#water_network) | water distribution | 0.02431 / 0.02431 | 0.01493 / 0.01493 | 0.01155 / 0.01155 | better / better | better / better |
+| [circuit](#circuit) | electrical circuits | 0.2958 / 0.2958 | 0.4109 / 0.4109 | 0.4033 / 0.4033 | worse / worse | worse / worse |
+| [truss](#truss) | structural mechanics | 0.1423 / 0.1423 | 0.2407 / 0.2407 | 0.2343 / 0.2343 | worse / worse | worse / worse |
+| [building_end_use](#building_end_use) | building energy (real data) | 0.5468 / 0.5468 | 1.732 / 1.732 | 0.5693 / 0.5693 | worse / worse | worse / worse |
+| [bank_balance_sheets](#bank_balance_sheets) | banking (real data) | 0.241 / 0.241 | 0.7124 / 0.7124 | 0.2432 / 0.2432 | worse / worse | no clear difference / no clear difference |
+| [county_population](#county_population) | demography (real data) | 0.4807 / 0.4807 | 7.503 / 7.503 | 0.4237 / 0.4237 | worse / worse | better / better |
+
+‡ the two rules score a different set of outputs in this domain (fermentation); in every other domain the scored outputs, and therefore all numbers, are identical under both rules.
+
+- As specified vs MLP, new rule: 2 better, 1 no clear difference, 11 worse. Original rule: 3 better, 1 no clear difference, 10 worse.
+- Scaled vs MLP, new rule: 6 better, 4 no clear difference, 4 worse. Original rule: 6 better, 3 no clear difference, 4 worse, 1 not measured.
+- End-to-end (d) vs post-hoc projection (c), new rule: 8 better, 0 no clear difference, 6 worse. Original rule: 8 better, 0 no clear difference, 6 worse.
+<!-- results-table:end -->
 
 **How to read the table:**
 
@@ -34,21 +46,58 @@ an extractive distillation subsystem and a chemical plant. This suite applies it
   fermentation). 1.0 is roughly "no better than predicting the mean".
 - **Verdict.** "Better" or "worse" means the 95% bootstrap confidence interval (over test points) of the difference
   from the standard MLP excludes zero; otherwise "no clear difference".
-- **Constraint satisfaction.** Both KKT-hPINN variants satisfy the equalities exactly in every domain: 0% of test
-  points above a 1e-5 relative violation, and at most 3.9e-12 for the specified variant. The standard MLP violates them
-  on 100% of test points in every domain.
+- **Constraint satisfaction.** Both KKT-hPINN variants satisfy the equalities exactly in every trained domain: 0% of
+  test points above a 1e-5 relative violation. The largest violation was 3.95e-12 for the specified variant (d), and
+  4.21e-12 for post-hoc projection (c). The standard MLP violates the equalities on 100% of test points in every
+  domain.
 - **"As specified" vs "scaled".** "As specified" projects onto the constraints in original units, as the protocol
-  requires. "Scaled" uses the same layer, but finds the nearest feasible point after dividing each output by its
-  training standard deviation. This was added during the run, beyond the original protocol (see
-  [Test bench](#test-bench)).
-- **Tally.**
-  - As specified, KKT-hPINN is better in 2 domains, shows no clear difference in 1, and is worse in 11.
-  - Scaled, it is better in 6, shows no clear difference in 4, and is worse in 4.
-  - Where outputs span very different magnitudes, the specified variant's projection error becomes large (combustion
-    738.6, county_population 7.503).
-- **Two more domains were attempted and failed the data gate,** so no results are reported for them:
-  - **FAOSTAT food balance sheets:** values are rounded to 1,000 t, so the identities close only to ±1–2 kt.
-  - **SEC EDGAR company financials:** a few filings report totals that don't add up as filed.
+  requires. In raw units the large outputs dominate the correction, which swamps small outputs: combustion's trace
+  species, or births next to population totals. "Scaled" uses the same layer but finds the nearest feasible point
+  after dividing each output by its training standard deviation. It was added during the run, beyond the original
+  protocol, after the specified variant's results had been seen (see [Test bench](#test-bench)).
+
+### Scoring rule changed after results were seen
+
+- **What changed.** At first, an output was scored unless it was constant on the test set. At 05:28, after the first
+  fermentation results had been seen, outputs constant in *training* were also excluded. One such output, glucose at
+  48 h, had dominated fermentation's average (see [DECISIONS.md](DECISIONS.md)).
+- **Effect on conclusions.** Only fermentation is affected, and its conclusion flips. As specified, KKT-hPINN is
+  worse than the MLP under the new rule but better under the original rule. So the as-specified tally is 2 better /
+  1 no clear difference / 11 worse under the new rule, against 3 / 1 / 10 under the original rule.
+- **Retraining.** Fermentation was also retrained after the change (5 seeds instead of 3). The original-rule column
+  is recomputed from that retrained run's saved predictions. The scaled variant could not be rescored under the
+  original rule, because its predictions were not saved.
+- **Other mid-run changes.** Three other changes also came after early results: the pooled metric, the row-scale
+  floor (which restarted metabolic and water_network) and the scaled variant. All are logged with timings in
+  [DECISIONS.md](DECISIONS.md).
+
+### Status of every domain in the original plan
+
+<!-- plan-status:start -->
+| domain | tier | status |
+|---|---|---|
+| metabolic | 1 | passed (gate residual 1.69e-13) |
+| water_network | 1 | passed (gate residual 2.73e-16) |
+| dc_power_flow | 1 | passed (gate residual 1.1e-13) |
+| combustion | 1 | passed (gate residual 1.3e-14) |
+| truss | 1 | passed (gate residual 1.61e-14) |
+| circuit | 1 | passed (gate residual 2.39e-14) |
+| process_flowsheet | 1 | passed (gate residual 3.25e-07) |
+| pharmacokinetics | 1 | passed (gate residual 2.2e-15) |
+| epidemic | 1 | passed (gate residual 2.71e-15) |
+| building_end_use | 2 | passed (gate residual 9.73e-05, labels projected) |
+| bank_balance_sheets | 2 | passed (gate residual 1.4e-07) |
+| food_balance | 2 | failed gate (max relative residual 0.0327) |
+| company_financials | 2 | failed gate (max relative residual 0.000533) |
+| county_population | 2 | passed (gate residual 0) |
+| fermentation | 3 | passed (gate residual 2.52e-15) |
+| heat_exchanger_network | 3 | passed (gate residual 1.9e-16) |
+| bea_input_output | 3 | skipped: optional tier 3 ('only if time remains'); not started before the write-up was cut short on request |
+| lodes_commuting | 3 | skipped: optional tier 3 ('only if time remains'); not started before the write-up was cut short on request |
+<!-- plan-status:end -->
+
+- **food_balance** (FAOSTAT): values are rounded to 1,000 t, so supply = utilisation closes only to ±1–2 kt.
+- **company_financials** (SEC EDGAR): a few filings report totals that don't add up as filed.
 
 All tables, including the soft-penalty model, post-hoc projection, bound violations and timings, are in
 [results/summary.md](results/summary.md). Every judgement call is in [DECISIONS.md](DECISIONS.md), and the plots are in

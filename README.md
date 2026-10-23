@@ -108,9 +108,11 @@ fixed-network variant) for studying it.
 
 ## Benchmark suite
 
-[bench/](bench/README.md) tests the same KKT projection layer on 14 domains beyond pooling, from metabolism and power
-grids to bank balance sheets. The layer satisfies the linear equalities exactly in every domain. Its accuracy
-relative to a standard MLP depends on how the projection is scaled; see [bench/README.md](bench/README.md).
+[bench/](bench/README.md) applies the KKT projection layer of Chen, Constante-Flores & Li (2024) to domains beyond the paper's case studies: of 18 planned, 16 were attempted, 14 passed the data gate and were trained, 2 failed it, none were degenerate and 2 optional ones were skipped.
+In every trained domain the layer satisfies the equalities exactly (largest test-set violation 3.95e-12, relative), while a plain MLP violated them on 100% of test points.
+Against the plain MLP it was better in 2 domains, showed no clear difference (95% CI includes 0) in 1 and was worse in 11 (3 / 1 / 10 under the scoring rule in place before a mid-run change affecting one domain); end-to-end training beat projecting after training in 8 domains and lost in 6.
+Much of the accuracy loss comes from projecting in raw units, where large outputs dominate the correction; scaling each output by its spread first gave 6 better, 4 no clear difference and 4 worse.
+Details: [bench/README.md](bench/README.md).
 
 ## Layout
 
