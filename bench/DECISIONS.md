@@ -297,3 +297,20 @@ Every judgement call made while building the suite, in the order it was made.
 - **Protocol.** c_w uses the main run's saved (a) predictions (float32). d_w retrains with the same seeds, split,
   standardisation, backbone and early stopping. Results go to `ablation_weighted.json` and are reported in a
   separate section, labelled as beyond the original protocol. The main (c)/(d) results are unchanged.
+
+### process_flowsheet (tier 1, "closest to the original paper"; parallel worker, reviewed here)
+- **Flowsheet.** IDAES-PSE 2.13 Mixer (two feeds) → Flash → Splitter on the flash liquid; the vapour leaves.
+- **Properties and solver.** BTX ideal VLE package with benzene/toluene/o-xylene and component-flow state variables;
+  IPOPT 3.13.2, tol and constr_viol_tol 1e-10.
+- **Phases.** Feeds, mixer and splitter use a liquid-only copy of the package (subcooled feeds, bubble-point liquid);
+  only the flash is two-phase.
+- **Inputs (13).** Feed component flows U(0.05, 1) mol/s each (6); feed T U(300, 340) K and P U(1.5e5, 3e5) Pa (4);
+  flash P U(0.5e5, 1.2e5) Pa and T = T_bub + θ(T_dew − T_bub) with θ U(0.1, 0.9), always two-phase (2); split
+  fraction U(0.1, 0.9).
+- **Outputs (15).** Component flows of the mixer outlet, vapour, liquid and both splitter outlets.
+- **Equality.** Per-component balances for mixer, flash and splitter (9 rows, rank 9 of 15 = 0.6).
+- **Solves.** Warm-started, with retries. A false zero-vapour solution of the FcTP formulation is detected (mole
+  fractions not summing to 1) and retried. 0 of 20,000 samples were non-converged.
+- **Gate.** Max 3.25e-7 (pass, no projection). Only 4 samples are above 1e-8.
+- **Threads.** It started last (05:12) on an otherwise idle machine, so it trains with 4 torch threads instead of 1.
+  This changes only wall time.
