@@ -261,3 +261,14 @@ Every judgement call made while building the suite, in the order it was made.
   The bad values are as filed: transposed digits, the Liabilities figure tagged as the total, sign errors.
 - **Outcome.** Per the rules, the labels were not altered and the samples were not dropped on residual. Failed; no
   results are reported.
+
+### heat_exchanger_network (tier 3, added because time allowed)
+- **Network.** 2 hot and 2 cold streams with fixed CP (H1 30, H2 15, C1 20, C2 25 kW/K) and 4 counter-current
+  exchangers in a grid (E1 H1–C1, E2 H1–C2, E3 H2–C1, E4 H2–C2, in series along each stream), solved by
+  effectiveness-NTU.
+- **Inputs.** The 4 inlet temperatures (H1 U(150, 250), H2 U(120, 220), C1 U(20, 80), C2 U(30, 100) °C) and 4 UA
+  values (logU(2, 40) kW/K).
+- **Outputs.** Duty and both outlet temperatures of each exchanger (12).
+- **Equality.** Hot-side and cold-side energy balance of each exchanger (8 rows, rank 8 of 12 = 0.667).
+- **Bounds.** Only E1's duty is bounded ≥ 0. Downstream exchangers can run in reverse (negative duty) when the
+  preheated cold stream is hotter than the hot stream; this is physical, and the balances still hold.
