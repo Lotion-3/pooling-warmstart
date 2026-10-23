@@ -112,6 +112,7 @@ fixed-network variant) for studying it.
 In every trained domain the layer satisfies the equalities exactly (largest test-set violation 3.95e-12, relative), while a plain MLP violated them on 100% of test points.
 Against the plain MLP it was better in 2 domains, showed no clear difference (95% CI includes 0) in 1 and was worse in 11 (3 / 1 / 10 under the scoring rule in place before a mid-run change affecting one domain); end-to-end training beat projecting after training in 8 domains and lost in 6.
 Much of the accuracy loss comes from projecting in raw units, where large outputs dominate the correction; scaling each output by its spread first gave 6 better, 4 no clear difference and 4 worse.
+Projecting the plain MLP's predictions onto the constraints after training, with each output scaled by its spread, never increased error on any test point (measured in those same scaled units) and lowered nRMSE in all 14 domains (95% CI excludes zero in 13). This scaled variant was added after the first results.
 Details: [bench/README.md](bench/README.md).
 
 ## Layout
