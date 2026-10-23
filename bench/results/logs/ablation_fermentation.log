@@ -1,0 +1,6 @@
+05:37:03 [fermentation] seed 0: nRMSE c_w=0.07780 d_w=0.08477 (main a=0.08011 c=0.17554 d=0.1432) viol% d_w=0.0 epochs 55
+05:37:24 [fermentation] seed 1: nRMSE c_w=0.08194 d_w=0.07982 (main a=0.08554 c=0.24798 d=0.16276) viol% d_w=0.0 epochs 81
+05:37:42 [fermentation] seed 2: nRMSE c_w=0.08715 d_w=0.07999 (main a=0.09004 c=0.20332 d=0.17188) viol% d_w=0.0 epochs 77
+05:38:04 [fermentation] seed 3: nRMSE c_w=0.07259 d_w=0.08657 (main a=0.07604 c=0.18302 d=0.16061) viol% d_w=0.0 epochs 86
+05:38:24 [fermentation] seed 4: nRMSE c_w=0.08088 d_w=0.08289 (main a=0.08459 c=0.20697 d=0.14616) viol% d_w=0.0 epochs 76
+05:38:30 [fermentation] ablation done

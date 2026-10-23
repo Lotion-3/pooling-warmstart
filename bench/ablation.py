@@ -59,6 +59,7 @@ def main():
     assert np.allclose(Yte, saved["Y"]), "test labels differ from the main run"
     sd = Yte.std(0)
     valid = sd > 1e-12 * np.maximum(1.0, np.abs(Yte).mean(0))
+    valid &= dom.Y[tr].std(0) >= 1e-12          # outputs constant in training are not scored either
 
     T = Trainer(dom, tr, va, Ar, Br, br, scale, max_epochs=args.max_epochs)
     W = Projector(Ar, Br, br, w=T.ysd ** 2)           # train std, floored at 1 for constant outputs

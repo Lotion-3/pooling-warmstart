@@ -1,0 +1,4 @@
+05:25:49 [process_flowsheet] seed 0: nRMSE c_w=0.02131 d_w=0.02454 (main a=0.02468 c=0.021337 d=0.024456) viol% d_w=0.0 epochs 294
+05:26:32 [process_flowsheet] seed 1: nRMSE c_w=0.02190 d_w=0.02511 (main a=0.02530 c=0.022004 d=0.024654) viol% d_w=0.0 epochs 228
+05:27:06 [process_flowsheet] seed 2: nRMSE c_w=0.02104 d_w=0.02872 (main a=0.02402 c=0.021078 d=0.025929) viol% d_w=0.0 epochs 171
+05:27:06 [process_flowsheet] ablation done

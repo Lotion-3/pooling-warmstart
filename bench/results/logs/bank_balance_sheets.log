@@ -1,0 +1,8 @@
+03:43:51 [bank_balance_sheets] n=50000 p=18 q=18 m=3 rank=3 (0.167 q); gate pass max=1.404e-07 projected=False
+03:47:39 [bank_balance_sheets] tune lam=0.1: val nRMSE 0.26359 (219.8s)
+03:53:38 [bank_balance_sheets] tune lam=1.0: val nRMSE 0.27560 (358.4s)
+04:03:36 [bank_balance_sheets] tune lam=10.0: val nRMSE 0.44701 (598.6s)
+04:13:22 [bank_balance_sheets] seed 0: nRMSE a=0.22084 b=0.25642 c=1.43851 d=0.81531  pooled a=0.10623 c=0.10463 d=0.99168  viol% a=100.0 c=0.0 d=0.0 (585s)
+04:32:36 [bank_balance_sheets] seed 1: nRMSE a=0.22803 b=0.23730 c=1.44284 d=0.73983  pooled a=0.09322 c=0.09267 d=0.93995  viol% a=100.0 c=0.0 d=0.0 (1154s)
+04:54:45 [bank_balance_sheets] seed 2: nRMSE a=0.27415 b=0.26099 c=1.90968 d=0.58221  pooled a=0.14184 c=0.14048 d=0.60114  viol% a=100.0 c=0.0 d=0.0 (1329s)
+04:54:58 [bank_balance_sheets] done in 4265s

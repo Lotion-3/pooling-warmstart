@@ -1,0 +1,38 @@
+{
+ "domain": "food_balance",
+ "meta": {
+  "source": "FAOSTAT Food Balances (2010-), dataset FBS, bulk file https://bulks-faostat.fao.org/production/FoodBalanceSheets_E_All_Data_(Normalized).zip (FAOSTAT update 2025-10-28, downloaded 2026-10-23, 54,840,802 bytes; listed in https://bulks-faostat.fao.org/production/datasets_E.json)",
+  "license": "FAO statistical databases are released under CC BY 4.0 per FAO's open data / database terms of use (as understood at download; the bulk file itself carries no license text). Cite FAO. FAOSTAT Food Balances. Rome.",
+  "tier": 2,
+  "units": "quantities in 1000 t (published as integers); population in 1000 persons",
+  "generation": "Individual countries only (area codes < 5000, and the aggregate 351 'China' removed in favour of its four listed parts); individual items only (codes 2511-2899; 2501 Population and every code >= 2900, i.e. Grand Total, Vegetal/Animal Products and the item groups, removed). One sample per (country, item, year t) whose t and t-1 records both exist and whose t-1 population is published; elements not published within an existing record count as 0 (nil / not applicable), Domestic supply is present in every record. 222128 country-item-year records, 17298 without a t-1 record, 0 without t-1 population; 204830 samples over 178 areas x 98 items, targets 2011-2023. Stock Variation enters supply with a minus sign (addition to stocks), verified on the data. Because values are rounded to integer kt, the identities close only to within 2 kt in all but one record (Nepal, oranges, 2014: Processing 54 kt left out of Domestic supply). Labels are the published values.",
+  "x_desc": "year-(t-1) Production, Import, Export, Stock Variation, Domestic supply, Food, Feed, Seed, Losses, Processing, Other uses, Tourist consumption, Residuals of the same country-item (1000 t) and year-(t-1) total population (1000 persons) (14)",
+  "y_desc": "year-t Production, Import, Export, Stock Variation, Domestic supply, Food, Feed, Seed, Losses, Processing, Other uses, Tourist consumption, Residuals (1000 t) (13)"
+ },
+ "n_raw": 204830,
+ "n": 50000,
+ "p": 14,
+ "q": 13,
+ "m": 2,
+ "gate": {
+  "resid_max": 0.03267947908813504,
+  "resid_mean": 0.00017036765367426512,
+  "resid_p99": 0.0006051755386691673,
+  "frac_above_1e-6": 0.2969,
+  "labels_projected": false,
+  "status": "fail"
+ },
+ "rank": {
+  "rank": 2,
+  "m": 2,
+  "q": 13,
+  "ratio": 0.15384615384615385,
+  "rows_kept": [
+   0,
+   1
+  ],
+  "sv_min_kept": 2.182643356689363,
+  "sv_max": 3.039089991675105
+ },
+ "status": "failed_gate"
+}

@@ -1,0 +1,8 @@
+03:43:50 [epidemic] n=20000 p=8 q=150 m=30 rank=30 (0.200 q); gate pass max=2.712e-15 projected=False
+03:47:38 [epidemic] tune lam=0.1: val nRMSE 0.04582 (220.1s)
+03:51:48 [epidemic] tune lam=1.0: val nRMSE 0.04201 (250.6s)
+03:58:42 [epidemic] tune lam=10.0: val nRMSE 0.04305 (412.9s)
+04:13:17 [epidemic] seed 0: nRMSE a=0.04583 b=0.04841 c=0.15463 d=0.15415  pooled a=0.02142 c=0.02004 d=0.08629  viol% a=100.0 c=0.0 d=0.0 (875s)
+04:31:19 [epidemic] seed 1: nRMSE a=0.04194 b=0.04644 c=0.15363 d=0.19167  pooled a=0.01945 c=0.01798 d=0.10615  viol% a=100.0 c=0.0 d=0.0 (1083s)
+04:47:07 [epidemic] seed 2: nRMSE a=0.04501 b=0.04358 c=0.15057 d=0.23113  pooled a=0.02184 c=0.02068 d=0.12729  viol% a=100.0 c=0.0 d=0.0 (947s)
+04:47:31 [epidemic] done in 3812s

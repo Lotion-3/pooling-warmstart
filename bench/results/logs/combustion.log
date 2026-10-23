@@ -1,0 +1,8 @@
+03:43:50 [combustion] n=20000 p=7 q=53 m=6 rank=5 (0.094 q); gate pass max=1.298e-14 projected=False
+03:47:00 [combustion] tune lam=0.1: val nRMSE 0.52839 (182.0s)
+03:50:48 [combustion] tune lam=1.0: val nRMSE 0.46534 (228.5s)
+03:53:46 [combustion] tune lam=10.0: val nRMSE 0.52704 (177.2s)
+03:58:05 [combustion] seed 0: nRMSE a=0.57581 b=0.54445 c=24139.43943 d=984.26575  pooled a=0.08095 c=0.08053 d=0.97821  viol% a=100.0 c=0.0 d=0.0 (259s)
+04:08:47 [combustion] seed 1: nRMSE a=0.57560 b=0.54737 c=15731.78573 d=552.14881  pooled a=0.07605 c=0.07563 d=0.98338  viol% a=100.0 c=0.0 d=0.0 (642s)
+04:16:52 [combustion] seed 2: nRMSE a=0.55213 b=0.65745 c=13319.03599 d=679.45855  pooled a=0.07361 c=0.07338 d=0.97824  viol% a=100.0 c=0.0 d=0.0 (485s)
+04:17:09 [combustion] done in 1991s

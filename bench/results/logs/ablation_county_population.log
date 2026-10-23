@@ -1,0 +1,4 @@
+04:57:55 [county_population] seed 0: nRMSE c_w=0.54244 d_w=0.44172 (main a=0.56198 c=46.82 d=8.2101) viol% d_w=0.0 epochs 87
+04:59:32 [county_population] seed 1: nRMSE c_w=0.42616 d_w=0.43169 (main a=0.44590 c=40.478 d=7.1145) viol% d_w=0.0 epochs 28
+05:00:44 [county_population] seed 2: nRMSE c_w=0.40988 d_w=0.39775 (main a=0.43420 c=43.483 d=7.1851) viol% d_w=0.0 epochs 21
+05:00:49 [county_population] ablation done

@@ -1,0 +1,4 @@
+05:08:08 [water_network] seed 0: nRMSE c_w=0.01511 d_w=0.01254 (main a=0.02970 c=0.019085 d=0.014455) viol% d_w=0.0 epochs 141
+05:09:32 [water_network] seed 1: nRMSE c_w=0.00991 d_w=0.01212 (main a=0.01866 c=0.013163 d=0.015994) viol% d_w=0.0 epochs 154
+05:12:31 [water_network] seed 2: nRMSE c_w=0.01298 d_w=0.01000 (main a=0.02457 c=0.017764 d=0.014343) viol% d_w=0.0 epochs 182
+05:12:44 [water_network] ablation done

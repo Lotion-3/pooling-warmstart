@@ -1,0 +1,8 @@
+03:59:53 [metabolic] n=20000 p=7 q=95 m=72 rank=67 (0.705 q); gate pass max=1.693e-13 projected=False
+04:04:49 [metabolic] tune lam=0.1: val nRMSE 0.08395 (285.2s)
+04:12:21 [metabolic] tune lam=1.0: val nRMSE 0.08640 (452.6s)
+04:21:59 [metabolic] tune lam=10.0: val nRMSE 0.10100 (577.1s)
+04:36:17 [metabolic] seed 0: nRMSE a=0.08251 b=0.09669 c=0.14560 d=1.00166  pooled a=0.04761 c=0.04699 d=1.00053  viol% a=100.0 c=0.0 d=0.0 (858s)
+04:47:59 [metabolic] seed 1: nRMSE a=0.09941 b=0.09295 c=0.21182 d=1.00483  pooled a=0.06183 c=0.06073 d=1.00073  viol% a=100.0 c=0.0 d=0.0 (702s)
+04:59:35 [metabolic] seed 2: nRMSE a=0.09623 b=0.09033 c=0.19011 d=1.00197  pooled a=0.05941 c=0.05843 d=1.00069  viol% a=100.0 c=0.0 d=0.0 (695s)
+04:59:53 [metabolic] done in 3593s

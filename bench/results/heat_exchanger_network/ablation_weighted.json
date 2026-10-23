@@ -1,0 +1,149 @@
+{
+ "domain": "heat_exchanger_network",
+ "n_seeds": 3,
+ "per_seed": [
+  {
+   "seed": 0,
+   "c_w": {
+    "nrmse": 0.015088964707317418,
+    "pooled_nrmse": 0.015235962397486555,
+    "eq_viol_max": 3.285776762460619e-16,
+    "eq_viol_mean": 1.2195004692512524e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 0.0,
+     "max_abs": 0.0,
+     "max_rel_std": 0.0,
+     "pct_entries": 0.0
+    }
+   },
+   "d_w": {
+    "nrmse": 0.013796970962099904,
+    "pooled_nrmse": 0.013947116263710707,
+    "eq_viol_max": 1.0586219897168519e-15,
+    "eq_viol_mean": 3.1295791969766437e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 0.0,
+     "max_abs": 0.0,
+     "max_rel_std": 0.0,
+     "pct_entries": 0.0
+    },
+    "train_seconds": 266.76034219993744,
+    "epochs": 161,
+    "best_val_objective": 0.00020884823929366873
+   }
+  },
+  {
+   "seed": 1,
+   "c_w": {
+    "nrmse": 0.014190034009493743,
+    "pooled_nrmse": 0.014232637461202555,
+    "eq_viol_max": 3.2294317508551296e-16,
+    "eq_viol_mean": 1.2238636441960576e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 0.0,
+     "max_abs": 0.0,
+     "max_rel_std": 0.0,
+     "pct_entries": 0.0
+    }
+   },
+   "d_w": {
+    "nrmse": 0.016755125304141905,
+    "pooled_nrmse": 0.01692943676926299,
+    "eq_viol_max": 1.1512514138170763e-15,
+    "eq_viol_mean": 3.368438415838065e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 0.0,
+     "max_abs": 0.0,
+     "max_rel_std": 0.0,
+     "pct_entries": 0.0
+    },
+    "train_seconds": 155.72775710001588,
+    "epochs": 99,
+    "best_val_objective": 0.0002988779958617785
+   }
+  },
+  {
+   "seed": 2,
+   "c_w": {
+    "nrmse": 0.017505800849577247,
+    "pooled_nrmse": 0.01768382609379763,
+    "eq_viol_max": 3.285776762460619e-16,
+    "eq_viol_mean": 1.2161647402802063e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 0.0,
+     "max_abs": 0.0,
+     "max_rel_std": 0.0,
+     "pct_entries": 0.0
+    }
+   },
+   "d_w": {
+    "nrmse": 0.015367060123764304,
+    "pooled_nrmse": 0.01591115439259594,
+    "eq_viol_max": 1.1380186389456158e-15,
+    "eq_viol_mean": 3.107579534540792e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 0.0,
+     "max_abs": 0.0,
+     "max_rel_std": 0.0,
+     "pct_entries": 0.0
+    },
+    "train_seconds": 191.53215280000586,
+    "epochs": 131,
+    "best_val_objective": 0.0002617439583890953
+   }
+  }
+ ],
+ "aggregate": {
+  "c_w": {
+   "nrmse_mean": 0.015594933188796137,
+   "nrmse_std": 0.001714812092515313,
+   "pooled_nrmse_mean": 0.01571747531749558,
+   "pooled_nrmse_std": 0.001775265265682872,
+   "eq_viol_max_mean": 3.2669950919254555e-16,
+   "eq_viol_max_std": 3.2530807617921807e-18,
+   "eq_viol_pct_above_1e-5_mean": 0.0,
+   "eq_viol_pct_above_1e-5_std": 0.0,
+   "bound_pct_points_mean": 0.0
+  },
+  "d_w": {
+   "nrmse_mean": 0.01530638546333537,
+   "nrmse_std": 0.0014800102495081283,
+   "pooled_nrmse_mean": 0.015595902475189877,
+   "pooled_nrmse_std": 0.0015159474687569334,
+   "eq_viol_max_mean": 1.115964014159848e-15,
+   "eq_viol_max_std": 5.0098477103755987e-17,
+   "eq_viol_pct_above_1e-5_mean": 0.0,
+   "eq_viol_pct_above_1e-5_std": 0.0,
+   "bound_pct_points_mean": 0.0
+  }
+ },
+ "bootstrap": {
+  "d_w_minus_a": {
+   "diff": -0.0026125114672158993,
+   "ci_lo": -0.0027824832980633475,
+   "ci_hi": -0.0024419637953560225
+  },
+  "d_w_minus_d": {
+   "diff": -0.0031033221250782,
+   "ci_lo": -0.0032944319415982087,
+   "ci_hi": -0.0028950362019775156
+  },
+  "c_w_minus_c": {
+   "diff": -0.0031803567210069283,
+   "ci_lo": -0.0032991110629581187,
+   "ci_hi": -0.0030577118225755774
+  },
+  "c_w_minus_a": {
+   "diff": -0.0023239637417551366,
+   "ci_lo": -0.002368158508899866,
+   "ci_hi": -0.0022815816458224506
+  }
+ },
+ "note": "c_w uses the main run's model (a) predictions saved as float32; d_w retrains with the same seeds, split, standardisation and early stopping as (d)"
+}

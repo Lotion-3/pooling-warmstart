@@ -1,0 +1,4 @@
+04:57:48 [building_end_use] seed 0: nRMSE c_w=0.60496 d_w=0.63878 (main a=0.60513 c=10.964 d=1.6725) viol% d_w=0.0 epochs 67
+05:03:30 [building_end_use] seed 1: nRMSE c_w=0.49462 d_w=0.47101 (main a=0.49473 c=8.7526 d=2.1876) viol% d_w=0.0 epochs 79
+05:07:37 [building_end_use] seed 2: nRMSE c_w=0.54065 d_w=0.59807 (main a=0.54068 c=7.2766 d=1.337) viol% d_w=0.0 epochs 82
+05:07:49 [building_end_use] ablation done

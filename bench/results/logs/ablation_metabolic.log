@@ -1,0 +1,4 @@
+05:05:32 [metabolic] seed 0: nRMSE c_w=0.08168 d_w=0.07667 (main a=0.08251 c=0.1456 d=1.0017) viol% d_w=0.0 epochs 180
+05:07:16 [metabolic] seed 1: nRMSE c_w=0.09803 d_w=0.09827 (main a=0.09941 c=0.21182 d=1.0048) viol% d_w=0.0 epochs 78
+05:08:19 [metabolic] seed 2: nRMSE c_w=0.09475 d_w=0.09340 (main a=0.09623 c=0.19011 d=1.002) viol% d_w=0.0 epochs 81
+05:08:22 [metabolic] ablation done

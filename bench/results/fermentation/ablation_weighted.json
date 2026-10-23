@@ -1,0 +1,213 @@
+{
+ "domain": "fermentation",
+ "n_seeds": 5,
+ "per_seed": [
+  {
+   "seed": 0,
+   "c_w": {
+    "nrmse": 0.07780040882840088,
+    "pooled_nrmse": 0.046961241050644066,
+    "eq_viol_max": 2.5232169074381465e-16,
+    "eq_viol_mean": 8.737689882382681e-17,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 100.0,
+     "max_abs": 0.25680181212019804,
+     "max_rel_std": 3166404.5187304267,
+     "pct_entries": 9.806666666666667
+    }
+   },
+   "d_w": {
+    "nrmse": 0.08476904010048729,
+    "pooled_nrmse": 0.05483433578957908,
+    "eq_viol_max": 7.56965072231444e-16,
+    "eq_viol_mean": 1.3750480805159796e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.7,
+     "max_abs": 0.22334016094711018,
+     "max_rel_std": 2198217.08261765,
+     "pct_entries": 7.368666666666666
+    },
+    "train_seconds": 13.183989400044084,
+    "epochs": 55,
+    "best_val_objective": 0.07224237213559805
+   }
+  },
+  {
+   "seed": 1,
+   "c_w": {
+    "nrmse": 0.08194017938647943,
+    "pooled_nrmse": 0.051713553541076575,
+    "eq_viol_max": 2.5232169074381465e-16,
+    "eq_viol_mean": 8.605220994742179e-17,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.9,
+     "max_abs": 0.20407492693985674,
+     "max_rel_std": 1401091.0737517993,
+     "pct_entries": 6.976333333333333
+    }
+   },
+   "d_w": {
+    "nrmse": 0.07982094590204016,
+    "pooled_nrmse": 0.04581102803514345,
+    "eq_viol_max": 6.308042268595366e-16,
+    "eq_viol_mean": 1.2557209476017174e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.93333333333332,
+     "max_abs": 0.2015424625913096,
+     "max_rel_std": 2462312.5918407696,
+     "pct_entries": 6.7540000000000004
+    },
+    "train_seconds": 20.331148399971426,
+    "epochs": 81,
+    "best_val_objective": 0.05985565311374031
+   }
+  },
+  {
+   "seed": 2,
+   "c_w": {
+    "nrmse": 0.08715157976057537,
+    "pooled_nrmse": 0.05402193692620442,
+    "eq_viol_max": 2.5232169074381465e-16,
+    "eq_viol_mean": 8.630453163816562e-17,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.93333333333332,
+     "max_abs": 0.24667926352363656,
+     "max_rel_std": 1437271.501202082,
+     "pct_entries": 7.857666666666667
+    }
+   },
+   "d_w": {
+    "nrmse": 0.07998632193841587,
+    "pooled_nrmse": 0.047824935686010386,
+    "eq_viol_max": 7.56965072231444e-16,
+    "eq_viol_mean": 1.3299455782955227e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.63333333333333,
+     "max_abs": 0.2618700920360606,
+     "max_rel_std": 1611070.810863765,
+     "pct_entries": 8.505
+    },
+    "train_seconds": 18.570551000069827,
+    "epochs": 77,
+    "best_val_objective": 0.06780308417298316
+   }
+  },
+  {
+   "seed": 3,
+   "c_w": {
+    "nrmse": 0.07259204814864785,
+    "pooled_nrmse": 0.043725595540145955,
+    "eq_viol_max": 2.5232169074381465e-16,
+    "eq_viol_mean": 8.604169654364079e-17,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.96666666666667,
+     "max_abs": 0.18755104937447986,
+     "max_rel_std": 1705374.3612676384,
+     "pct_entries": 8.561
+    }
+   },
+   "d_w": {
+    "nrmse": 0.0865745616947826,
+    "pooled_nrmse": 0.05218861030768681,
+    "eq_viol_max": 1.0092867629752586e-15,
+    "eq_viol_mean": 1.2977745627256864e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 100.0,
+     "max_abs": 0.3040272562991704,
+     "max_rel_std": 2246909.0573116248,
+     "pct_entries": 8.323
+    },
+    "train_seconds": 21.71518380008638,
+    "epochs": 86,
+    "best_val_objective": 0.06806276713359323
+   }
+  },
+  {
+   "seed": 4,
+   "c_w": {
+    "nrmse": 0.08088293145343604,
+    "pooled_nrmse": 0.05056919113525254,
+    "eq_viol_max": 2.5232169074381465e-16,
+    "eq_viol_mean": 8.68512286347772e-17,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.96666666666667,
+     "max_abs": 0.262837236512496,
+     "max_rel_std": 1811089.4511937278,
+     "pct_entries": 9.863
+    }
+   },
+   "d_w": {
+    "nrmse": 0.08289328830379515,
+    "pooled_nrmse": 0.05059455674378018,
+    "eq_viol_max": 7.56965072231444e-16,
+    "eq_viol_mean": 1.566497163367849e-16,
+    "eq_viol_pct_above_1e-5": 0.0,
+    "bounds": {
+     "pct_points": 99.83333333333333,
+     "max_abs": 0.2492818113906532,
+     "max_rel_std": 2182094.242464078,
+     "pct_entries": 6.961333333333333
+    },
+    "train_seconds": 19.427709799958393,
+    "epochs": 76,
+    "best_val_objective": 0.06483575159872236
+   }
+  }
+ ],
+ "aggregate": {
+  "c_w": {
+   "nrmse_mean": 0.08007342951550792,
+   "nrmse_std": 0.0053707064144404605,
+   "pooled_nrmse_mean": 0.049398303638664716,
+   "pooled_nrmse_std": 0.00406903660732056,
+   "eq_viol_max_mean": 2.5232169074381465e-16,
+   "eq_viol_max_std": 0.0,
+   "eq_viol_pct_above_1e-5_mean": 0.0,
+   "eq_viol_pct_above_1e-5_std": 0.0,
+   "bound_pct_points_mean": 99.95333333333333
+  },
+  "d_w": {
+   "nrmse_mean": 0.08280883158790422,
+   "nrmse_std": 0.0029548390472561564,
+   "pooled_nrmse_mean": 0.05025069331243999,
+   "pooled_nrmse_std": 0.003552410116200242,
+   "eq_viol_max_mean": 7.821972413058254e-16,
+   "eq_viol_max_std": 1.3820228176822976e-16,
+   "eq_viol_pct_above_1e-5_mean": 0.0,
+   "eq_viol_pct_above_1e-5_std": 0.0,
+   "bound_pct_points_mean": 99.82
+  }
+ },
+ "bootstrap": {
+  "d_w_minus_a": {
+   "diff": -0.0004575185870554499,
+   "ci_lo": -0.002715721488834743,
+   "ci_hi": 0.0010332271643551513
+  },
+  "d_w_minus_d": {
+   "diff": -0.07411207741689971,
+   "ci_lo": -0.07683398222245483,
+   "ci_hi": -0.0727684625188856
+  },
+  "c_w_minus_c": {
+   "diff": -0.12329258524932801,
+   "ci_lo": -0.13004999584687374,
+   "ci_hi": -0.12101119560945423
+  },
+  "c_w_minus_a": {
+   "diff": -0.003192920659451759,
+   "ci_lo": -0.0032791862762229147,
+   "ci_hi": -0.003116941440698407
+  }
+ },
+ "note": "c_w uses the main run's model (a) predictions saved as float32; d_w retrains with the same seeds, split, standardisation and early stopping as (d)"
+}

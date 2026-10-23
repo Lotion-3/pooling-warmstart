@@ -1,0 +1,4 @@
+04:58:59 [epidemic] seed 0: nRMSE c_w=0.04434 d_w=0.04110 (main a=0.04583 c=0.15463 d=0.15415) viol% d_w=0.0 epochs 168
+05:04:07 [epidemic] seed 1: nRMSE c_w=0.04039 d_w=0.04133 (main a=0.04194 c=0.15363 d=0.19167) viol% d_w=0.0 epochs 153
+05:06:43 [epidemic] seed 2: nRMSE c_w=0.04380 d_w=0.04870 (main a=0.04501 c=0.15057 d=0.23113) viol% d_w=0.0 epochs 103
+05:07:03 [epidemic] ablation done

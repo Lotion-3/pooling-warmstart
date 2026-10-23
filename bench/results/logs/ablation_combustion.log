@@ -1,0 +1,4 @@
+04:56:55 [combustion] seed 0: nRMSE c_w=0.57360 d_w=0.55812 (main a=0.57581 c=24139 d=984.27) viol% d_w=0.0 epochs 142
+05:00:45 [combustion] seed 1: nRMSE c_w=0.57334 d_w=0.60792 (main a=0.57560 c=15732 d=552.15) viol% d_w=0.0 epochs 121
+05:04:04 [combustion] seed 2: nRMSE c_w=0.55027 d_w=0.57824 (main a=0.55213 c=13319 d=679.46) viol% d_w=0.0 epochs 129
+05:04:12 [combustion] ablation done

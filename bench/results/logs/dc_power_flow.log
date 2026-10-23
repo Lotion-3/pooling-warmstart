@@ -1,0 +1,8 @@
+03:44:12 [dc_power_flow] n=20000 p=117 q=187 m=118 rank=118 (0.631 q); gate pass max=1.095e-13 projected=False
+03:50:41 [dc_power_flow] tune lam=0.1: val nRMSE 0.02355 (375.3s)
+03:56:46 [dc_power_flow] tune lam=1.0: val nRMSE 0.02410 (364.2s)
+04:01:10 [dc_power_flow] tune lam=10.0: val nRMSE 0.02983 (263.5s)
+04:11:42 [dc_power_flow] seed 0: nRMSE a=0.02569 b=0.02380 c=0.01310 d=0.01227  pooled a=0.02003 c=0.00806 d=0.00695  viol% a=100.0 c=0.0 d=0.0 (633s)
+04:25:58 [dc_power_flow] seed 1: nRMSE a=0.02621 b=0.02657 c=0.01303 d=0.01177  pooled a=0.01984 c=0.00793 d=0.00647  viol% a=100.0 c=0.0 d=0.0 (856s)
+04:39:26 [dc_power_flow] seed 2: nRMSE a=0.02456 b=0.02837 c=0.01267 d=0.01189  pooled a=0.01944 c=0.00811 d=0.00668  viol% a=100.0 c=0.0 d=0.0 (809s)
+04:39:51 [dc_power_flow] done in 3333s

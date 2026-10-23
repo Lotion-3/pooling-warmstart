@@ -1,0 +1,8 @@
+03:46:09 [building_end_use] n=50000 p=119 q=50 m=7 rank=7 (0.140 q); gate pass max=9.728e-05 projected=True
+03:52:50 [building_end_use] tune lam=0.1: val nRMSE 0.19929 (387.8s)
+03:57:15 [building_end_use] tune lam=1.0: val nRMSE 0.20363 (264.3s)
+04:02:38 [building_end_use] tune lam=10.0: val nRMSE 0.20280 (322.3s)
+04:15:10 [building_end_use] seed 0: nRMSE a=0.60513 b=0.56005 c=10.96387 d=1.67246  pooled a=0.35284 c=0.35268 d=0.37480  viol% a=100.0 c=0.0 d=0.0 (751s)
+04:32:10 [building_end_use] seed 1: nRMSE a=0.49473 b=0.53823 c=8.75260 d=2.18765  pooled a=0.36037 c=0.36026 d=0.37076  viol% a=100.0 c=0.0 d=0.0 (1020s)
+04:47:49 [building_end_use] seed 2: nRMSE a=0.54068 b=0.52226 c=7.27661 d=1.33703  pooled a=0.36619 c=0.36609 d=0.36562  viol% a=100.0 c=0.0 d=0.0 (939s)
+04:48:11 [building_end_use] done in 3717s

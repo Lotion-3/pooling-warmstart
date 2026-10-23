@@ -1,0 +1,8 @@
+03:43:48 [circuit] n=20000 p=46 q=32 m=14 rank=14 (0.438 q); gate pass max=2.389e-14 projected=False
+03:52:17 [circuit] tune lam=0.1: val nRMSE 0.29211 (500.3s)
+04:00:26 [circuit] tune lam=1.0: val nRMSE 0.28442 (489.0s)
+04:09:44 [circuit] tune lam=10.0: val nRMSE 0.27842 (557.8s)
+04:20:54 [circuit] seed 0: nRMSE a=0.29270 b=0.27765 c=0.28612 d=0.40784  pooled a=0.25915 c=0.25202 d=0.35997  viol% a=100.0 c=0.0 d=0.0 (670s)
+04:39:06 [circuit] seed 1: nRMSE a=0.28895 b=0.27398 c=0.28276 d=0.41059  pooled a=0.25543 c=0.24880 d=0.36219  viol% a=100.0 c=0.0 d=0.0 (1092s)
+04:52:44 [circuit] seed 2: nRMSE a=0.30565 b=0.27688 c=0.29753 d=0.41429  pooled a=0.27012 c=0.26109 d=0.36568  viol% a=100.0 c=0.0 d=0.0 (818s)
+04:52:54 [circuit] done in 4141s

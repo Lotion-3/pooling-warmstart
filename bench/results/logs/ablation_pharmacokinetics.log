@@ -1,0 +1,4 @@
+04:59:07 [pharmacokinetics] seed 0: nRMSE c_w=0.02490 d_w=0.02356 (main a=0.02621 c=0.025233 d=0.025566) viol% d_w=0.0 epochs 215
+05:05:26 [pharmacokinetics] seed 1: nRMSE c_w=0.02259 d_w=0.02292 (main a=0.02379 c=0.023251 d=0.025711) viol% d_w=0.0 epochs 254
+05:08:21 [pharmacokinetics] seed 2: nRMSE c_w=0.02451 d_w=0.02577 (main a=0.02558 c=0.025168 d=0.026149) viol% d_w=0.0 epochs 182
+05:08:25 [pharmacokinetics] ablation done
